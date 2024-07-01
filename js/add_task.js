@@ -1,4 +1,4 @@
-const BASE_URL_GUEST = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app';
+// const BASE_URL_GUEST = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app';
 let show = true;
 let guesteArray = [];
 let userPriotity;
@@ -17,10 +17,11 @@ async function loadGuestFromServer() {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
         const data = await response.json();
-        guesteArray = Object.keys(data).map(id => ({
+        const serverDaten = Object.keys(data).map(id => ({
             id,
             ...data[id]
         }));
+        guesteArray = [user, ...serverDaten];
 
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten:', error);
