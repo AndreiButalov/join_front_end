@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/fonts/inter.css">
+    <link rel="stylesheet" href="./css/contacts.css">
+    <link rel="stylesheet" href="./css/templates.css">
+    <link rel="stylesheet" href="./css/mediaQueries/mTemplates.css">
+    <link rel="stylesheet" href="./css/mediaQueries/mContacts.css">
+    <link rel="icon" type="image/x-icon" href="./assets/img/joinIconSmall.svg">
+    <title>Contacts</title>
+</head> 
+<body onload="includeHTML()" onclick="closeNavOnOutsideClick(event); closeMobileContactOptionsOnOutsideClick(event)">  
+
+    <div id="greyBackground" class="addGreyBackgroundOpacity d-none" onclick="closeContactPopUp(); closeDeletePopUp();"></div>
+            
+        <div class="contactsHTMLBase">
+            <!-- Templates -->
+            <div w3-include-html="./templates/header.html"></div>
+            <div w3-include-html="./templates/navBar.html"></div>
+        
+            <section id="content" class="contactsHTMLContainer">    
+                <section id="listSection">
+                    <div class="innerListContainer">
+
+                        <div class="listButtonContainer">
+                            <button class="addContactButton" onclick="openAddContactPopUp()">
+                                Add new contact 
+                                <img src="./assets/img/person_add.svg">
+                            </button>
+                        </div>
+
+                        <div id="contactList" class="contactList">
+                            
+                        </div>
+                    </div>
+                    
+                    <button onclick="openAddContactPopUp()" class="btn mobileContactButton">
+                        <img src="./assets/img/mobileAddContactButton.svg">
+                    </button>
+                </section>
+        
+
+                <section id="contactViewSection" class="contactViewSection">
+                    <svg onclick="slideOutContactViewScreenForMobile()" class="blueArrowToLeft" src="./assets/img/blueArrowToLeft.svg" xmlns="http://www.w3.org/2000/svg" width="25" height="23" viewBox="0 0 25 23" fill="none">
+                        <path d="M6.00972 9.88554H23.1871C24.0362 9.88554 24.7246 10.5739 24.7246 11.4231C24.7246 12.2722 24.0362 12.9606 23.1871 12.9606H6.00972L13.17 20.1209C13.7704 20.7213 13.7704 21.6946 13.17 22.295C12.5697 22.8954 11.5963 22.8954 10.996 22.295L1.53824 12.8373C0.757188 12.0562 0.757188 10.7899 1.53824 10.0089L10.996 0.55115C11.5963 -0.0492049 12.5697 -0.0492048 13.17 0.55115C13.7704 1.1515 13.7704 2.12487 13.17 2.72523L6.00972 9.88554Z" fill="#29ABE2"/>
+                    </svg>
+
+                    <div class="titleContainer">
+                        <h1 id="summaryTitle" class="title">Contacts</h1>
+                        <div class="blueVerticalLine">
+                        </div>
+                        <div class="subTitleContainer">
+                            <h2 class="subTitle">Better with a team</h2>
+                        </div>
+                        <div class="mobileBlueHorizontalLine">
+                        </div>
+                    </div>
+
+                    <div id="contactView" class="viewContactContainer">
+
+                    </div>
+
+                    <div id="contactPageConfirmation" class="contactPageConfirmation">
+                        <span id="contactPageConfirmationSpan" class="contactPageConfirmationSpan">
+                            Confirmation
+                        </span>
+                    </div>
+                </section>
+            </section>
+
+            <div id="contactPopUp" class="contactPopUp">
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="deletePopUp" class="deletePopUp d-none">
+    </div>
+
+    <script src="./js/script.js"></script>
+    <script src="./js/contacts.js"></script>
+    <script src="./js/contactsHTML.js"></script>                        
+</body>
+</html>
+
+
+
+

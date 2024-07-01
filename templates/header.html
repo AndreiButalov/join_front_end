@@ -1,0 +1,25 @@
+    <header id="header" class="header">
+        <div class="headerLogoAndTitleContainer">
+            <a id="a-logo-mobile" href="index.html"><img src="./assets/img/logo.svg" class="headerLogo" ></a>
+
+            <p class="headerTitle">Kanban Project Management Tool</p>
+        </div>
+
+        <div class="headerProfileContainer" id="headerProfileContainer">
+            <a href="help.html" class="btn"><img class="helpIcon" src="assets/img/helpIcon.svg"></a>
+            <button class="btn" onclick="openHeadNav(event)" id="userCircle">
+                <svg id="initialCircle" xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56" fill="none">
+                    <circle cx="28" cy="28" r="26.5" stroke="#2A3647" stroke-width="3"/>
+                    <circle class="circle-background" cx="28" cy="28" r="26.5" fill="transparent"/>
+                    <text id="headInnitials" class="headInnitials" x="50%" y="54%" text-anchor="middle" alignment-baseline="middle" fill="rgba(41,171,226)">G</text>
+                </svg>
+            </button>
+
+            <div id="headerNav" class="headerNavContainer d-none">
+                <a id="helpLink" class="btn headerNavLink" href="help.html">Help</a>
+                <a class="btn headerNavLink" href="legalnotice.html">Legal Notice</a>
+                <a class="btn headerNavLink" href="privacypolicy.html">Privacy Policy</a>
+                <a onclick="resetCurrentUser()" class="btn headerNavLink" href="index.html">Log out</a>
+            </div>
+        </div>
+    </header>

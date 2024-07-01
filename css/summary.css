@@ -1,0 +1,215 @@
+#summary {
+    position: relative;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.webGreetingContainer {
+    width: fit-content;
+}
+
+#summaryTitle {
+    margin-bottom: -16px;
+    margin-top: -16px;
+    box-sizing: border-box;
+    white-space: nowrap;
+}
+
+.subTitle{
+    font-size: clamp(20px, 2.5vw, 27px);    
+    color: #2A3647;
+    word-wrap: break-word;
+}
+
+#summaryMainSection {
+    display: flex;
+    align-items: center;
+    gap: 8%;
+    width: min-content;
+}
+
+.greetName{
+    margin: 0px;
+    color: #29ABE2;
+    font-size: clamp(28px, 4vw, 61px);
+    font-weight: 700;
+    margin: 0px;
+    word-wrap: break-word;
+}
+
+.greetingIntro{
+    font-size: clamp(20px, 2.5vw, 47px);
+    font-weight: 500;
+    margin-bottom: 3px;
+    margin-top: 0px;
+    color: #2A3647;
+}
+
+.summaryNumContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 300px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.summaryCount{
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 600;
+    margin-top: 0px;
+    color: black;
+}
+
+.toDoAndDoneSection {
+    display: flex;
+    gap: 4%;
+    justify-content: space-between;
+    flex: 1;
+}
+
+.toDoAndDoneContainer{
+    display: flex;
+    gap: 18px;
+    Padding: 32px 38px 32px 38px;
+    align-items: center;
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+}
+
+.boardProgressFeedbackSection{
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.greyVerticalLine {
+    border: 1px solid #D1D1D1;
+    width: 0px;
+    height: 88px;
+    border-radius: 30px;
+}
+
+.urgentContainer{
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    height: auto;
+    display: flex;
+    box-sizing: border-box;
+    padding: 28px 38px 28px 38px;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-around;
+}
+
+.urgentCountContainer{
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.urgentCountContainerWithImg{
+    display: flex;
+    gap: 18px;
+}
+
+.upcomingContainer {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+#upcomingDeadline{
+    font-weight: 700;
+    font-size: 21px;
+}
+
+.deadlinePhrase{
+    font-size: 16px;
+}
+
+.summaryBottomContainer{
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    width: 168px;
+    height: auto;
+    padding: 25px 0px 25px 0px;
+}
+
+.bottomSummaryCount {
+    margin-top: -8px;
+}
+
+.invert {
+    transition: background-color 0.125s ease-in-out; 
+}
+
+.invert:hover {
+    transform: scale(1.06);
+    cursor: pointer;
+    background-color: #2A3647;
+    color: white;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.invert:hover .bottomContainerText,
+.invert:hover .summaryCount,
+.invert:hover .urgentSpan,
+.invert:hover .countContainer,
+.invert:hover .deadlinePhrase,
+.invert:hover #upcomingDeadline {
+    color: inherit;
+}
+
+.invert:hover .summarySvg {
+    filter: sepia(50%) invert(91%) brightness(200%);
+}
+
+.invert:hover #greyVerticalLine{
+    border: 2px solid #FFFFFF;
+}
+
+.invert:hover .darkBlueStroke {
+    stroke: #2A3647;
+}
+
+.invert:hover .whiteFill {
+    fill: white;
+}
+
+.invert:hover .darkBlueFill {
+    fill: #2A3647;
+}
+
+.summarySpan {
+    width: max-content;
+}
+
+.whiteColor {
+    color: white;
+}
+
+.greetingLoginContainer{
+    display: none;
+}
+
+.toDoAndDoneContainer,
+.countContainer,
+.urgentContainer{
+    text-decoration: none;
+    color: black;
+}
+
+.pastDatesSpan {
+    display: none;
+}
+
+.pastDatesNumber{
+    font-weight: 700;
+    display: inline;
+}

@@ -1,0 +1,501 @@
+/* CSS TOOLS */
+/* CSS TOOLS */
+/* CSS TOOLS */
+
+.v-none{
+    visibility: none;
+}
+
+.d-none {
+    display: none !important;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.m-b-32 {
+    margin-bottom: 32px;
+}
+
+.m-b-24 {
+    margin-bottom: 24px;
+}
+
+.m-b-16 {
+    margin-bottom: 16px;
+}
+
+.font-size-20px{
+    font-size: 20px;
+}
+
+.font-size-28px{
+    font-size: 28px;
+}
+
+.whiteColor {
+    color: white;
+}
+
+.d-space-b {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* CSS TOOLS */
+/* CSS TOOLS */
+/* CSS TOOLS */
+
+
+body::-webkit-scrollbar {
+    width: var(--sb-size);
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 50px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 50px;
+    border: 8px solid #ffffff;
+  }
+
+  body::-webkit-scrollbar {
+    width: var(--sb-size);
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 50px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 50px;
+    border: 8px solid #ffffff;
+  }
+  
+  /* Fallback für Browser, die ::-webkit-scrollbar nicht unterstützen */
+  @supports not selector(::-webkit-scrollbar) {
+    body {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
+  }
+
+body {
+    margin: 0px;
+    font-family: 'Inter';
+    background-color: #F6F7F8;
+    color: #2A3647;
+    height: 100vh;
+}
+
+.content {
+    top: 206px;
+    left: 324px;    
+    box-sizing: border-box;
+    position: relative;
+}
+
+.contactsContent {
+    padding: 96px 96px 0px 232px;
+    margin-bottom: 96px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.titleContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    gap: 32px;
+    width: 100%;
+}
+
+.mainTitleContainer{
+    width: 100%;
+}
+
+.blueVerticalLine{
+    min-width: 3px;
+    height: 59px;
+    background-color: #29ABE2;;
+    border-radius: 32px;
+}
+
+.blueHorizontalLine{
+    width: 90px;
+    height: 3px;
+    background-color: #29ABE2;;
+    border-radius: 32px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    align-items: center;
+    padding: 24px;
+    Height: 135px;    
+    padding: 20px 40px 20px 348px;
+    box-shadow: 0px 4px 4px 0px #0000001A;
+    background-color: #FFFFFF;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+#initialCircle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    background-color: transparent;
+    border: none;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+.headInnitials {
+    color: rgb(41,171,226);
+    font-weight: 600;
+    width: 48px;
+    height: 48px;
+}
+
+.headerTitle {
+    font-weight: 400;
+    margin: 0px;
+    word-break: break-word;
+    width: fit-content;
+}
+
+.headerProfileContainer{
+    display: none;
+    align-items: center;
+    height: 56px;
+    gap: 16px;
+    width: 104px;
+}
+
+#navContainer {
+    display: none;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#navBar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    justify-content: space-between;
+    background-color: #2A3647;
+    height: 100%;
+    width: 232px; 
+    Padding: 64px 0px 64px 0px;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+#footer {
+    Width: Fill (232px);
+    Height: 20vh;    
+    Padding: 243px, 0px, 0px, 52px;
+    Gap: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+
+.navBarLink {
+    background-color: transparent;
+    border: none;
+    color: rgb(168,168,168);    
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 16px;
+    padding: 8px 0px 8px 0px;
+    text-decoration: none;
+}
+
+.navBarLink:hover {
+    cursor: pointer;
+}
+
+.mainNavLinkTransition{
+    transition: background-color 0.08s ease-in-out;
+}
+
+.mainNavLinkTransition:hover {
+    background-color: #2A3D59;
+}
+
+.footerButton {
+    padding: 8px;
+    gap: 8px;
+    text-align: left;
+    width: 128px;
+    font-size: 16px;
+    color: rgb(168,168,168);
+}
+
+.footerButton:hover {
+    color: #29ABE2;
+    font-weight: 700;
+}
+
+.footerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.navBarImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 121.97px;
+    cursor: pointer;
+}
+
+.navImgContainer {
+    width: 43%;
+    display: flex;
+    justify-content: end;
+}
+
+.navImg {
+    width: 30px;
+    height: 30px;
+    padding-right: 16px;
+    margin: 0;
+    transition: transform 0.075s ease-in-out;
+}
+
+.navButton:hover .navImg {
+    transform: scale(1.04);
+}
+
+#initialCircle:hover .circle-background {
+    fill: rgba(128, 128, 128, 0.2);
+}
+
+.title {
+    font-size: clamp(47px, 4vw, 61px);    
+    font-weight: 700;
+    color: #000000;
+    margin: 0px;
+}
+
+.subTitle {
+    font-size: 27px;
+    font-weight: 400;
+    margin: 0px;
+    min-width: 120px;
+}
+
+.radius-30 {
+    border-radius: 30px;
+}
+
+.backgroundcolor-white {
+    background-color: white;
+}
+
+.countContainer {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.helpIcon {
+    transition: transform 0.075s ease-in-out;
+}
+
+.helpIcon:hover {
+    transform: scale(1.2);
+}
+
+
+.popUpTitle{
+    font-size: 61px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0px;
+}
+
+#greyBackground{
+    height: 100%;
+    background-color: #000000;
+    width: 100%;
+    z-index: 3;
+    position: fixed;
+    opacity: 0;
+}
+
+.addGreyBackgroundOpacity {
+    animation: addGreyBackgroundOpacity 0.3s ease-in-out forwards;
+}
+
+@keyframes addGreyBackgroundOpacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.removeGreyBackgroundOpacity {
+    animation: removeGreyBackgroundOpacity 0.3s ease-in-out forwards;
+}
+
+@keyframes removeGreyBackgroundOpacity {
+    0% {
+        opacity: 0.3;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.headerNavContainer{
+    width: 134px;
+    height: auto;
+    padding: 10px 10px 10px 10px;
+    border-radius: 20px 0px 20px 20px;
+    background-color: #2A3647;
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    font-weight: 400;
+    position: fixed;
+    z-index: 1;
+    top: 135px;
+    right: -50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.headerNavLink {
+    padding: 13.5px;
+    color: #CDCDCD;
+    font-size: 16px;
+    background-color: #2A3647;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.headerNavLink:hover {
+    cursor: pointer;
+    background-color: #2A3D59;
+}
+
+.navBarFocusAnker{
+    background-color: transparent;
+    border: none;
+    color: white;    
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 16px;
+    padding: 8px 0px 8px 0px;
+    text-decoration: none;
+    background-color: #091931;
+}
+
+.navBarImgFocus{
+    filter: brightness(200%);
+}
+
+.headerLogo {
+    display: none;
+    padding-right: 40px;
+    min-width: 32px;
+}
+
+.headerLogoAndTitleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blueArrowToLeft {
+    width: 25px;
+    height: 23px;
+    display: none;
+    position: fixed;
+    top: 48px;
+    right: 16px;
+}
+
+.blueArrowToLeft:hover {
+    cursor: pointer;
+}
+
+#helpLink{
+    display: none;
+}
+
+@keyframes slideInNav {
+    from {
+        right: -50%;
+    }
+    to {
+        right: 3%;
+    }
+}
+
+@keyframes slideOutNav {
+    from {
+        right: 3%;
+    }
+    to {
+        right: -50%;
+    }
+}
+
+
+.slideIn {
+    animation: slideIn 0.2s ease-in-out forwards;
+}
+
+.slideOut {
+    animation: slideOut 0.2s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+    from {
+        right: -50%;
+    }
+    to {
+        right: 50%;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        right: 50%;
+    }
+    to {
+        right: -50%;
+    }
+}

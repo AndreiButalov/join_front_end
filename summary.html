@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/fonts/inter.css">
+    <link rel="stylesheet" href="./css/templates.css">
+    <link rel="stylesheet" href="./css/summary.css">
+    <link rel="stylesheet" href="./css/mediaQueries/mTemplates.css">
+    <link rel="stylesheet" href="./css/mediaQueries/mSummary.css">
+    <link rel="icon" type="image/x-icon" href="./assets/img/joinIconSmall.svg">
+    <title>Dashboard</title>
+</head> 
+<body onload="includeHTML()" onclick="closeNavOnOutsideClick(event)">  
+
+    <div id="greyBackground" class="addGreyBackgroundOpacity d-none" onclick="closeContactPopUp(); closeDeletePopUp();"></div>
+    <!-- Templates -->
+        <div w3-include-html="./templates/header.html"></div>
+        <div w3-include-html="./templates/navBar.html"></div>
+    </div>
+
+    <div id="loginGrettingScreen" class="d-none greetingLoginContainer">
+        <div class="d-flex">
+            <h2 class="greetingIntro greetAtTime"></h2>
+        </div>    
+        <h1 class="greetName"></h1>
+    </div>    
+
+    <section id="summary" class="content">
+
+
+
+        <div class="titleContainer">
+            <h1 id="summaryTitle" class="title">Join 360</h1>
+            <div class="blueVerticalLine">
+            </div>
+            <h2 class="subTitle">Key Metrics at a Glance</h2>
+            <div class="mobileBlueHorizontalLine">
+            </div>
+        </div>
+
+        <div id="summaryMainSection">
+            <div class="summaryNumContainer">
+                <div class="toDoAndDoneSection">
+                    <a href="board.html" class="toDoAndDoneContainer radius-30 backgroundcolor-white invert">
+                        <img class="summarySvg summarySvgSize" src="assets/img/penIcon.svg">
+                        <div class="countContainer">
+                            <num id="toDo" class="summaryCount">0</num>
+                            <span class="summarySpan">To-do</span>
+                        </div>
+                    </a>
+                    <a href="board.html" class="toDoAndDoneContainer radius-30 backgroundcolor-white invert">
+                        <svg class="summarySvgSize" xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70" fill="none">
+                            <circle class="whiteFill" cx="35" cy="35" r="34.5" fill="#2A3647"/>
+                            <path class="darkBlueStroke" d="M20.0283 35.0001L31.2571 46.0662L49.9717 23.9341" stroke="white" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <div class="countContainer">
+                            <num id="done" class="summaryCount">0</num>
+                            <span class="summarySpan">Done</span>
+                        </div>
+                    </a>
+                </div>            
+
+                <a href="board.html" class="urgentContainer radius-30 backgroundcolor-white invert">
+                    <div class="urgentCountContainerWithImg">
+                        <img class="summarySvgSize" src="assets/img/urgentIcon.svg">
+                        <div class="urgentCountContainer">
+                            <num id="urgent" class="summaryCount">0</num>
+                            <span class="urgentSpan">Urgent</span>
+                        </div>
+                    </div>
+
+                    <div class="greyVerticalLine">
+                    </div>
+                    
+                    <div class="upcomingContainer">
+                        <span id="upcomingDeadline">Date,</span>
+                        <span id="deadlinePhrase" class="deadlinePhrase">Upcoming Deadline</span>
+                        <span id="pastDatesSpan" class="pastDatesSpan">
+                            (<span class="pastDatesNumber" id="pastDatesNumber">
+                            </span> 
+                        task <b>missed</b>).</span>
+                    </div>
+                </a>
+
+                <div class="boardProgressFeedbackSection">
+                    <a href="board.html" class="countContainer radius-30 backgroundcolor-white summaryBottomContainer invert">
+                        <num id="inBoard" class="summaryCount bottomSummaryCount">0</num>
+                        <span class="bottomContainerText">Tasks in<br>Board</span>
+                    </a>
+                        
+                    <a href="board.html" class="countContainer radius-30 backgroundcolor-white summaryBottomContainer invert">
+                        <num id="inProgress" class="summaryCount bottomSummaryCount">0</num>
+                        <span class="bottomContainerText">Tasks in<br>Progress</span>
+                    </a>
+
+                    <a href="board.html" class="countContainer radius-30 backgroundcolor-white summaryBottomContainer invert">
+                        <num id="awaitFeedback" class="summaryCount bottomSummaryCount">0</num>
+                        <span class="bottomContainerText">Awaiting<br>Feedback</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="webGreetingContainer" id="webGreetingContainer">
+                <div class="d-flex">
+                    <h2 class="greetingIntro greetAtTime"></h2>
+                </div>    
+                <h1 class="greetName"></h1>
+            </div>
+        </div>
+    </section>
+    
+    
+    <script src="./js/script.js"></script>
+    <script src="./js/summary.js"></script>      
+</body>
+</html>
+

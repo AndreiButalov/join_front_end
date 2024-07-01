@@ -1,0 +1,606 @@
+@font-face {
+    font-family: Inter-Bold;
+    src: url(/out/fonts/Inter-Bold.ttf);
+}
+
+@font-face {
+    font-family: Inter;
+    src: url(/out/fonts/Inter-Regular.ttf);
+}
+
+body {
+    background-color: rgb(246, 247, 249);
+    margin: 0;
+    font-family: Inter;
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    padding: 32px;
+    padding-bottom: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 1440px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 100vh;
+    gap: 48px;
+}
+
+.logo {
+    position: absolute;
+    /* Startposition in der Mitte */
+    transform: translate(-50%, -50%) scale(1);
+    /* Zentriert das Logo und behält die ursprüngliche Größe bei */
+    transition: all 500ms ease-in-out 300ms;
+    /* Glatter Übergang von 2 Sekunden */
+    z-index: 10;
+    animation: logoMoveIn 2s;
+    width: 100.03px;
+    height: 121.97px;
+    top: 15%;
+    left: 15%;
+}
+
+#logo-mobile {
+    display: none;
+}
+
+@keyframes logoMoveIn {
+    0% {
+        top: 50%;
+        /* Startposition in der Mitte */
+        left: 50%;
+        transform: translate(-50%, -50%) scale(3);
+    }
+
+    50% {
+        top: 50%;
+        /* Startposition in der Mitte */
+        left: 50%;
+        transform: translate(-50%, -50%) scale(3);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        width: 100.03px;
+        height: 121.97px;
+        top: 15%;
+        left: 15%;
+    }
+}
+
+#login-section,
+#register-section {
+    flex: 1;
+}
+
+.arrow-left-line {
+    position: absolute;
+    top: 64px;
+    left: 48px;
+    cursor: pointer;
+}
+
+.signUp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    height: min-content;
+}
+
+.box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    background-color: white;
+    padding: 48px 115px;
+    border-radius: 16px;
+    box-shadow: 1px 1px 3px rgba(180, 180, 180, 0.253);
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.box h1 {
+    font-size: 61px;
+    margin: 0;
+    font-family: Inter-Bold;
+    line-height: 73.2px;
+}
+
+.box form {
+    display: flex;
+    flex-direction: column;
+    width: 422px;
+    gap: 32px;
+}
+
+.box input {
+    padding: 12px 21px;
+    padding-right: 35px;
+    border: solid 1px #d1d1d1;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-position: 98%;
+    background-size: 16px;
+    gap: 10px;
+}
+
+.input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+#name {
+    background-image: url(/assets/img/person.svg);
+}
+
+#email {
+    background-image: url('/assets/img/mail.svg');
+    background-size: 14px;
+}
+
+#password {
+    background-image: url('/assets/img/lock.svg');
+}
+
+.box input::placeholder {
+    color: #d1d1d1;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 16px;
+}
+
+.checkbox input {
+    margin: 0;
+    border-radius: 3px;
+    border: solid 3px black;
+    width: 16px;
+    height: 16px;
+}
+
+.checkbox a {
+    text-decoration: none;
+    color: #29ABE2;
+}
+
+.buttons {
+    gap: 16px;
+}
+
+.button {
+    padding: 15px 24px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border-width: 1px;
+    cursor: pointer;
+    transition: 150ms;
+    height: 48px;
+    font-family: Inter-Bold;
+    font-weight: 700;
+    font-size: 21px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.blue-button {
+    color: white;
+    background-color: #2a3648;
+    border: none;
+}
+
+.blue-button:hover {
+    background-color: #2dabe1;
+}
+
+.white-button {
+    background-color: white;
+}
+
+.white-button:hover {
+    color: #2dabe1;
+    border-color: #2dabe1;
+}
+
+.password-container,
+.email-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"],
+.email-container input[type="email"] {
+    width: 100%;
+    padding-right: 35px;
+    /* Platz für das Symbol */
+}
+
+.password-container .toggle-password,
+.email-container .toggle-password {
+    position: absolute;
+    right: 10px;
+}
+
+#register-name {
+    background-image: url('/assets/img/person.svg');
+}
+
+#register-email {
+    background-image: url('/assets/img/mail.svg');
+}
+
+.signup-succesfully-infobutton-container {
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+    background-color: #0000003d;
+    position: absolute;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    animation: opacity 0.5s;
+}
+
+@keyframes opacity {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.signup-succesfully-infobutton {
+    background-color: #2a3648;
+    color: white;
+    border-radius: 20px;
+    padding: 0 25px;
+    width: max-content;
+    position: absolute;
+    bottom: -50px;
+    animation: moveUp 0.3s forwards;
+}
+
+@keyframes moveUp {
+    from {
+        bottom: -50px;
+    }
+
+    to {
+        bottom: 50%;
+    }
+}
+
+.wrong-password {
+    display: none;
+    color: red;
+    font-size: 12px;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 8px;
+    flex: 1;
+    max-height: 100px;
+}
+
+.footer-links {
+    display: flex;
+    width: 246px;
+    gap: 24px;
+}
+
+.footer-links a {
+    font-weight: 400;
+    color: #CDCDCD;
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #19b9fd;
+    font-weight: bold;
+}
+
+.d-space-b {
+    display: flex;
+    justify-content: space-between;
+}
+
+.d-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-end {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.d-none {
+    display: none;
+}
+
+.m-left-48 {
+    margin-left: 48px;
+}
+
+.fade-in {
+    animation: fadeIn 1.2s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.logo-fullscreen {
+    width: 274px;
+    height: 334.07px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.animation-logo {
+    animation: shrinkAndMove 1s ease-in-out forwards;
+    /* Verwende die Animation */
+    animation-delay: 800ms;
+    /* Verzögerung der Animation um 1 Sekunde */
+}
+
+@keyframes shrinkAndMove {
+    0% {
+        width: 274px;
+        height: 334.07px;
+    }
+
+    100% {
+        width: 100.03px;
+        height: 121.97px;
+        top: 15%;
+        left: 15%;
+    }
+}
+
+.logo-placeholder {
+    width: 177px;
+    height: 208px;
+    top: 67px;
+    left: 75px;
+    background-color: blue;
+}
+
+.signUp-mobile {
+    display: none;
+}
+
+@media (max-width: 1080px) {
+    .logo-fullscreen {
+        transform: translate(-110%, -50%);
+    }
+}
+
+@media (max-width:900px) {
+    .signUp-mobile {
+        display: flex;
+        justify-content: center;
+    }
+
+    .signUp-section {
+        display: none;
+    }
+
+    .logo-fullscreen {
+        transform: translate(-30%, -50%);
+    }
+
+    .content {
+        padding-top: 70px;
+    }
+
+    .logo-fullscreen {
+        width: 32px;
+    }
+
+    .box {
+        padding: 48px 0;
+        width: 100%;
+    }
+
+    .logo {
+        width: 80px;
+        height: 80px;
+        animation: logo-mobile 2s;
+        top: 8%;
+    }
+
+    #logo-mobile {
+        display: flex;
+        animation: logo-mobile 2s;
+        opacity: 0;
+        width: 80px;
+        height: 80px;
+    }
+
+    @keyframes logo-mobile {
+        0% {
+            opacity: 1;
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        50% {
+            opacity: 1;
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            width: 80px;
+            height: 80px;
+            top: 8%;
+            left: 15%;
+        }
+    }
+
+    .blue-bg {
+        animation: fadeOut 1.2s;
+        background-color: #2A3647;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    @keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+}
+
+@media (max-width:520px) {
+    .box form {
+        width: 90%;
+    }
+
+    .button {
+        font-size: 16px;
+    }
+
+    .logo {
+        position: absolute;
+        /* Startposition in der Mitte */
+        transform: translate(-50%, -50%) scale(1);
+        /* Zentriert das Logo und behält die ursprüngliche Größe bei */
+        transition: all 500ms ease-in-out 300ms;
+        /* Glatter Übergang von 2 Sekunden */
+        z-index: 10;
+        animation: logoMoveIn 2s;
+        width: 64px;
+        height: 64px;
+        top: 8%;
+        left: 25%;
+    }
+
+    #logo-mobile {
+        width: 64px;
+        height: 64px;
+    }
+
+    .arrow-left-line {
+        left: 25px;
+    }
+
+    @keyframes logo-mobile {
+        0% {
+            opacity: 1;
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        50% {
+            opacity: 1;
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(1);
+            width: 64px;
+            height: 64px;
+            top: 8%;
+            left: 25%;
+        }
+    }
+
+    @keyframes logoMoveIn {
+        0% {
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        50% {
+            top: 50%;
+            /* Startposition in der Mitte */
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3);
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            width: 64px;
+            height: 64px;
+            top: 8%;
+            left: 25%;
+        }
+    }
+
+}
+
+@media (max-width: 430px) {
+    .arrow-left-line {
+        position: static;
+    }
+}

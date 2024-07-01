@@ -1,0 +1,63 @@
+.privacy {
+    max-width: 1440px;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+
+p {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+.blue-highlight {
+    color: #29ABE2;
+    background-color: transparent;
+}
+
+.num {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+h3 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.point {
+    display: flex;
+    gap: 35px;
+}
+
+.content {
+    width: 70%;
+}
+
+.arrowLeft {
+    cursor: pointer;
+}
+
+.privacy-container {
+    top: 23vh;
+    left: 23vw;    
+    box-sizing: border-box;
+    position: relative;
+    width: 70%;
+}
+
+@media(max-width: 1100px){
+    .privacy-container {
+        left: 30vw;
+    }
+}
+
+@media(max-width: 850px) {
+    .privacy-container {
+        left: 0px;
+        width: 100%;
+        padding-inline: 50px;
+        padding-bottom: 100px;
+    }
+}
