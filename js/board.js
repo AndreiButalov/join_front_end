@@ -1,4 +1,4 @@
-// const BASE_URL = "https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app";
+const BASE_URL = "https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app";
 const usedIds = new Set();
 
 let showEdit = true;

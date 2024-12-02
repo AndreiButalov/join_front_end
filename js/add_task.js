@@ -1,4 +1,5 @@
 // const BASE_URL_GUEST = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app';
+const BASE_URL_GUEST = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app/';
 let show = true;
 let guesteArray = [];
 let userPriotity;
