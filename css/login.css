@@ -1,11 +1,12 @@
 @font-face {
     font-family: Inter-Bold;
-    src: url(/out/fonts/Inter-Bold.ttf);
+    /* src: url(/out/fonts/Inter-Bold.ttf); */
+    src: url(./../out/fonts/Inter-Bold.ttf);
 }
 
 @font-face {
     font-family: Inter;
-    src: url(/out/fonts/Inter-Regular.ttf);
+    src: url(./../out/fonts/Inter-Regular.ttf);
 }
 
 body {
@@ -143,16 +144,16 @@ body {
 }
 
 #name {
-    background-image: url(/assets/img/person.svg);
+    background-image: url(./../assets/img/person.svg);
 }
 
 #email {
-    background-image: url('/assets/img/mail.svg');
+    background-image: url('./../assets/img/mail.svg');
     background-size: 14px;
 }
 
 #password {
-    background-image: url('/assets/img/lock.svg');
+    background-image: url('./../assets/img/lock.svg');
 }
 
 .box input::placeholder {
@@ -241,11 +242,11 @@ body {
 }
 
 #register-name {
-    background-image: url('/assets/img/person.svg');
+    background-image: url('./../assets/img/person.svg');
 }
 
 #register-email {
-    background-image: url('/assets/img/mail.svg');
+    background-image: url('./../assets/img/mail.svg');
 }
 
 .signup-succesfully-infobutton-container {

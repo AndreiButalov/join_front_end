@@ -1,4 +1,4 @@
-const BASE_URL = 'ttps://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app';
+const BASE_URL = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app/';
 SetRememberData();
 checkIsUserLoginFromLastSession();
 
@@ -34,7 +34,7 @@ function showLoginBox() {
 function checkIsUserLoginFromLastSession() {
     let localstorage = localStorage.getItem('currentUser');
     if (localstorage != null) {
-        window.location.href = './summary.html';
+        window.location.href = 'summary.html';
     }
 }
 
@@ -83,7 +83,7 @@ async function login() {
 
     if (checkEmailInDB(data, email) && checkPasswortInDB(data, password)) {
         setCurrentUserInLocalStorage(data);
-        window.location.href = './summary.html';
+        window.location.href = 'summary.html';
         if (rememberMe) {
             setEmailToLocalstorage(email);
         } else { removeEmailFromLocalstorage() }
@@ -96,7 +96,7 @@ async function login() {
 
 function guestLogin() {
     setDefaultUser();
-    window.location.href = '/summary.html';
+    window.location.href = 'summary.html';
 }
 
 /**
@@ -235,10 +235,11 @@ function togglePasswordVisibility(id) {
     const toggleIcon = document.getElementById(id + '-password-icon');
     if (passwordField.type === "password") {
         passwordField.type = "text";
-        toggleIcon.src = "/assets/img/password-show.png"; // Symbol zum Verbergen
+
+        toggleIcon.src = "./assets/img/password-show.png"; // Symbol zum Verbergen
     } else {
         passwordField.type = "password";
-        toggleIcon.src = "/assets/img/password-hide.png";
+        toggleIcon.src = "./assets/img/password-hide.png";
     }
 }
 
@@ -267,7 +268,7 @@ function togglePasswordIcon(id) {
 function setPasswordIconToLock(id) {
     const toggleContainer = document.getElementById(id + '-password-icon-container');
     const toggleIcon = document.getElementById(id + '-password-icon');
-    toggleIcon.src = '/assets/img/lock.svg'
+    toggleIcon.src = './assets/img/lock.svg'
     toggleIcon.style.cursor = 'default';
     toggleContainer.onclick = null;
     toggleContainer.removeAttribute('onclick');
@@ -286,9 +287,9 @@ function setPasswordIconToEye(id) {
     toggleIcon.style.cursor = 'pointer'
     toggleContainer.setAttribute('onclick', 'togglePasswordVisibility("' + id + '")');
     if (passwordField.type === 'password') {
-        toggleIcon.src = "/assets/img/password-hide.png";
+        toggleIcon.src = "./assets/img/password-hide.png";
     } else {
-        toggleIcon.src = "/assets/img/password-show.png";
+        toggleIcon.src = "./assets/img/password-show.png";
     }
 }
 
