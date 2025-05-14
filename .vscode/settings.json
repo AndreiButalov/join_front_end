@@ -1,4 +1,5 @@
 {
     "CodeGPT.apiKey": "CodeGPT Plus Beta",
-    "docwriter.style": "JSDoc"
+    "docwriter.style": "JSDoc",
+    "liveServer.settings.port": 5501
 }
