@@ -82,21 +82,21 @@ async function addTaskToTasks(column) {
         'category': column,
         'date': document.getElementById('task_date').value,
         'description': document.getElementById('task_description').value,
-        'id': generateUniqueId(),
+        // 'id': generateUniqueId(),
         'name': namelist,
-        'initial': initials,
-        'color': colorList,
+        // 'initial': initials,
+        // 'color': colorList,
         'priorityImg': getPriorityImage(userPriotity),
         'priority': getUserPriorityStatus(userPriotity),
         'status': document.getElementById('task_category').value,
         'title': document.getElementById('task_title').value,
-        'subtasks': subtasks,
-        'selectedTask': [],
+        // 'subtasks': subtasks,
+        // 'selectedTask': [],
     };
 
-    todos.push(task);
-    await saveTasksToServer();
-    saveTaskToLocalStorage();
+    // todos.push(task);
+    
+    await saveTasksToServer(task);
     if (window.location.href.includes('board.html')) {
         closeWindow();
         initBoardTasks();

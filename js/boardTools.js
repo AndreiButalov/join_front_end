@@ -260,9 +260,12 @@ function allowDrop(ev) {
  */
 async function moveTo(category) {
     let contact = todos.find(obj => obj['id'] == currentElement);
+    if (!contact) return;
+
     contact['category'] = category;
-    await saveTasksToServer();
-    // saveTaskToLocalStorage();
+
+    await updateTaskOnServer(contact.id, { category });
+
     removeHighlightTaskCategory('board_' + category);
     initBoardTasks();
 }

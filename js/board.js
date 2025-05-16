@@ -17,19 +17,18 @@ let selectedNames = [];
  * The function `saveTasksToServer` asynchronously saves tasks to a server using a PUT request with
  * error handling.
  */
-async function saveTasksToServer() {
+async function saveTasksToServer(task) {
     try {
-        const response = await fetch(`${BASE_URL}/tasks.json`, {
-            method: 'PUT',
+        const response = await fetch(`${BASE_URL}tasks/`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(todos)
+            body: JSON.stringify(task)
         });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        console.log('Tasks saved to server');
     } catch (error) {
         console.error('Failed to save tasks to server:', error);
     }
@@ -68,26 +67,44 @@ async function loadTasksFromServer() {
  * server and local storage.
  */
 async function deleteTaskFromLocalStorage(id) {
-    let arr = [];
-    for (let i = 0; i < todos.length; i++) {
-        arr = (todos.filter(todo => todo.id != id));
+
+    todos = todos.filter(todo => todo.id !== id);
+    try {
+        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete task from server');
+        }
+
+    } catch (error) {
+        console.error('Error deleting task from server:', error);
     }
-    todos = arr;
-    await saveTasksToServer();
-    // saveTaskToLocalStorage();
+
     initBoardTasks();
     closeShowTask();
 }
 
 
-/**
- * The function `saveTaskToLocalStorage` converts a JavaScript array `todos` to a JSON string and saves
- * it to the browser's local storage under the key 'todosToServer'.
- */
-// function saveTaskToLocalStorage() {
-//     let todosAsText = JSON.stringify(todos);
-//     localStorage.setItem('todosToServer', todosAsText)
-// }
+async function updateTaskOnServer(id, updatedFields) {
+    try {
+        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedFields)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Update failed with status ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Failed to update task on server:', error);
+    }
+    initBoardTasks();
+}
 
 
 /**
