@@ -262,7 +262,7 @@ async function moveTo(category) {
     let contact = todos.find(obj => obj['id'] == currentElement);
     contact['category'] = category;
     await saveTasksToServer();
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     removeHighlightTaskCategory('board_' + category);
     initBoardTasks();
 }

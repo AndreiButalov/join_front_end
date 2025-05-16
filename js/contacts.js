@@ -205,15 +205,16 @@ function defineNewContact() {
  * to the Firebase database after converting it to JSON format.
  */
 async function postContactInFirebase(newContact) {
-    let response = await fetch(baseUrl + path + ".json", {
-        method: "POST",
+    let response = await fetch(baseUrl + path, {
+        method: 'POST',
         headers: {
-            "Content-Type":"application/json",
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(newContact)
     });
-    let responseAsJson = await response.json();
-    return responseAsJson;
+
+    let result = await response.json();
+    return result    
 }
 
 

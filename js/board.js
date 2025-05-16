@@ -1,4 +1,5 @@
-const BASE_URL = "https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app";
+const BASE_URL = "http://127.0.0.1:8000/api/";
+
 const usedIds = new Set();
 
 let showEdit = true;
@@ -11,7 +12,6 @@ let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
 
-loadTaskFromLocalStorage();
 
 /**
  * The function `saveTasksToServer` asynchronously saves tasks to a server using a PUT request with
@@ -42,7 +42,7 @@ async function saveTasksToServer() {
  */
 async function loadTasksFromServer() {
     try {
-        const response = await fetch(`${BASE_URL}/tasks.json`);
+        const response = await fetch(`${BASE_URL}tasks`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
@@ -51,6 +51,7 @@ async function loadTasksFromServer() {
             id,
             ...data[id]
         }));
+        console.log(todos);
 
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten:', error);
@@ -73,7 +74,7 @@ async function deleteTaskFromLocalStorage(id) {
     }
     todos = arr;
     await saveTasksToServer();
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     initBoardTasks();
     closeShowTask();
 }
@@ -83,21 +84,21 @@ async function deleteTaskFromLocalStorage(id) {
  * The function `saveTaskToLocalStorage` converts a JavaScript array `todos` to a JSON string and saves
  * it to the browser's local storage under the key 'todosToServer'.
  */
-function saveTaskToLocalStorage() {
-    let todosAsText = JSON.stringify(todos);
-    localStorage.setItem('todosToServer', todosAsText)
-}
+// function saveTaskToLocalStorage() {
+//     let todosAsText = JSON.stringify(todos);
+//     localStorage.setItem('todosToServer', todosAsText)
+// }
 
 
 /**
  * The function `loadTaskFromLocalStorage` retrieves and parses todos stored in the local storage.
  */
-function loadTaskFromLocalStorage() {
-    let todosAsText = localStorage.getItem('todosToServer');
-    if (todosAsText) {
-        todos = JSON.parse(todosAsText);
-    }
-}
+// function loadTaskFromLocalStorage() {
+//     let todosAsText = localStorage.getItem('todosToServer');
+//     if (todosAsText) {
+//         todos = JSON.parse(todosAsText);
+//     }
+// }
 
 
 /**
@@ -221,7 +222,7 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
         } else {
             contact.selectedTask = contact.selectedTask.filter(task => task !== subtask);
         }
-        saveTaskToLocalStorage();
+        // saveTaskToLocalStorage();
         await saveTasksToServer();
         initBoardTasks();
     }
@@ -411,7 +412,7 @@ async function addEditSubtask(i, id) {
     let contact = todos.find(obj => obj['id'] == id);
     let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`);
     contact.subtasks[i] = show_task_subtask_edit_input.value;
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -430,7 +431,7 @@ async function addEditSubtask(i, id) {
 async function showTaskDeleteSubtask(i, id) {
     let contact = todos.find(obj => obj['id'] == id);
     contact.subtasks.splice(i, 1);
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -454,7 +455,7 @@ async function addNewSubTaskEdit(id) {
         contact.subtasks.push(task_subtasks_edit);
     }
     task_subtasks.value = '';
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -540,7 +541,7 @@ function updateTaskCategory(contact) {
  * asynchronously.
  */
 async function saveTaskUpdates() {
-    saveTaskToLocalStorage();
+    // saveTaskToLocalStorage();
     await saveTasksToServer();
 }
 

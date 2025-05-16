@@ -35,9 +35,9 @@ function includeHTML() {
 }
 
 
-let baseUrl = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app';
+let baseUrl = 'http://127.0.0.1:8000/api/';
 let data = [];
-let path = '/guestContacts';
+let path = 'guestContacts/';
 let contactColors = ['#FF7A00', '#FF5EB3', '#6E52FF', '#9327FF', '#00BEE8', '#1FD7C1', '#FF745E', '#FFA35E', '#FC71FF', '#FFC701', '#0038FF', '#C3FF2B', '#FFE62B', '#FF4646', '#FFBB2B'];
 let colorIndex = 0;
 let popUpAction = false;
@@ -193,7 +193,7 @@ function initForCurrentPage() {
  * from the fetch response.
  */
 async function getData() {
-  response = await fetch(baseUrl + path + ".json");
+  response = await fetch(baseUrl + path);
   responseAsJson = await response.json();
   data = Object.values(responseAsJson);
 }
