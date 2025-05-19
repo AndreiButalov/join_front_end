@@ -45,13 +45,21 @@ function getInitials(name) {
  * populate and update a list of checkboxes in the HTML with the corresponding names and initials.
  */
 function getcheckBoxesEdit(id) {
-    let contact = todos.find(obj => obj['id'] == id);
+    let contact = todos.find(obj => obj['id'] == id);        
     let checkBoxesEdit = document.getElementById('checkBoxesEdit');
     checkBoxesEdit.innerHTML = '';
-    selectedNames = contact.name ? [...contact.name] : [];
+    let assignedGuest = contact.assigned_guests;    
+    let names = [];
 
+    for(let i = 0; i < assignedGuest.length; i++) {
+        let gast = findeGastNachId(guesteArray, assignedGuest[i])
+        names.push(gast.name)  
+    }
+    
+    selectedNames = names ? [...names] : [];
+    
     checkBoxesEdit.innerHTML = guesteArray.map(guest => {
-        let isChecked = contact.name ? contact.name.includes(guest.name) : false;
+        let isChecked = names ? names.includes(guest.name) : false;
         let initial = getInitials(guest.name);
         return rendergetcheckBoxesEdit(guest, initial, isChecked);
     }).join('');

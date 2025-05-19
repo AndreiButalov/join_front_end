@@ -284,7 +284,7 @@ function editTask(id) {
     let showTaskContainer = document.getElementById('showTaskContainer');
 
     showTaskContainer.style.display = 'none';
-    boardPopUp.innerHTML += renderEditTaskHtml(contact);/** */
+    boardPopUp.innerHTML += renderEditTaskHtml(contact);
 
     getcheckBoxesEdit(id);
     getContactPriorityEdit(contact);
@@ -349,12 +349,18 @@ function getContactInitialEdit(contact) {
  * can assist you better in completing the `generateSelectedNames` function?
  */
 function generateSelectedNames(contact) {
+
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
+
+    let assignedGuest = contact.assigned_guests;
+    
     if (selectedNames) {
         for (let i = 0; i < selectedNames.length; i++) {
+            let gast = findeGastNachId(guesteArray, assignedGuest[i]) 
+            let initial = getInitials(gast.name)
             task_edit_initial.innerHTML += `
-                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${contact.color[i]};">${contact.initial[i]}</div>
+                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color };">${initial}</div>
                 `;
         }
     } else {
@@ -384,6 +390,7 @@ function getSubtaskEdit(contact) {
         task_subtasks_edit.innerHTML = '';
     }
 }
+
 
 function getCurrentTaskCategoryEdit(contact) {
     let task_taskCategory_edit = document.getElementById('task_category_edit');
