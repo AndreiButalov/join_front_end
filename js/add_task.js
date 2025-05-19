@@ -1,9 +1,10 @@
-const BASE_URL_GUEST = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app/';
+const BASE_URL_GUEST = 'http://127.0.0.1:8000/api/';
 let show = true;
 let guesteArray = [];
 let userPriotity;
 let imgPriority;
 let addTaskProcess = false;
+let idList = [];
 
 
 /**
@@ -12,7 +13,7 @@ let addTaskProcess = false;
  */
 async function loadGuestFromServer() {
     try {
-        const response = await fetch(`${BASE_URL_GUEST}/guestContacts.json`);
+        const response = await fetch(`${BASE_URL_GUEST}guestContacts`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
@@ -83,7 +84,7 @@ async function addTaskToTasks(column) {
         'date': document.getElementById('task_date').value,
         'description': document.getElementById('task_description').value,
         // 'id': generateUniqueId(),
-        'name': namelist,
+        'assigned_guests': idList,
         // 'initial': initials,
         // 'color': colorList,
         'priorityImg': getPriorityImage(userPriotity),
@@ -95,7 +96,7 @@ async function addTaskToTasks(column) {
     };
 
     // todos.push(task);
-    
+
     await saveTasksToServer(task);
     if (window.location.href.includes('board.html')) {
         closeWindow();
@@ -234,6 +235,7 @@ function generateCheckBoxName() {
         .filter(Boolean);
 
     selectedGuests.forEach(guest => {
+        idList.push(guest.id)
         namelist.push(guest.name);
         colorList.push(guest.color);
         initials.push(getInitials(guest.name));

@@ -10,7 +10,6 @@
  * drag-and-drop functionality and task click events.
  */
 function renderHtmlToDo(element) {
-    
     return /*html*/`
     <div class="task" draggable="true" ondragstart=" startDragging(${element.id})" onclick="showTask(${element.id})">
         <div class="board_task_category" id="board_task_category${element.id}">${element.status}</div>
@@ -169,7 +168,7 @@ function renderGenerateShowTaskHtml(contact, id) {
  * checkbox element with the specified guest information (name, initial, color) and whether it is
  * checked based on the `isChecked` parameter.
  */
-function rendergetcheckBoxesEdit(guest, initial, isChecked) {
+function rendergetcheckBoxesEdit(guest, initial, isChecked) {  
     return `        
         <div class="board_task_check_box_name">
             <div class="show_task_checkbox_edit_name_input">

@@ -69,8 +69,8 @@ async function getBoardNumbersInSummary(){
  * an array of values - globally as data.
  */
 async function getBoardData() {
-    path = '/tasks';
-    response = await fetch(baseUrl + path + ".json");
+    path = 'tasks';
+    response = await fetch(baseUrl + path);
     responseAsJson = await response.json();
     data = Object.values(responseAsJson);
   }

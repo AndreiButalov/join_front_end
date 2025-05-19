@@ -11,6 +11,7 @@ let initials = [];
 let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
+let guesteContacts = [];
 
 
 /**
@@ -50,12 +51,11 @@ async function loadTasksFromServer() {
             id,
             ...data[id]
         }));
-        console.log(todos);
-
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten:', error);
     }
 }
+
 
 
 /**
@@ -108,24 +108,14 @@ async function updateTaskOnServer(id, updatedFields) {
 
 
 /**
- * The function `loadTaskFromLocalStorage` retrieves and parses todos stored in the local storage.
- */
-// function loadTaskFromLocalStorage() {
-//     let todosAsText = localStorage.getItem('todosToServer');
-//     if (todosAsText) {
-//         todos = JSON.parse(todosAsText);
-//     }
-// }
-
-
-/**
  * The function `initBoardTasks` loads tasks from the server and categorizes them into different
  * sections on a board based on their status.
  */
 async function initBoardTasks() {
     await loadTasksFromServer();
     await loadGuestFromServer();
-
+    
+    
     let task = document.getElementById('board_to_do');
     let progress = document.getElementById('board_in_progress');
     let awaitFeedback = document.getElementById('board_await_feedback');
@@ -228,6 +218,7 @@ async function generateShowTask(id) {
  * `false`, it means the subtask is not checked.
  */
 async function updateSubtaskStatus(contact, subtask, isChecked) {
+    
     if (contact) {
         if (!contact.selectedTask) {
             contact.selectedTask = [];
@@ -239,7 +230,6 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
         } else {
             contact.selectedTask = contact.selectedTask.filter(task => task !== subtask);
         }
-        // saveTaskToLocalStorage();
         await saveTasksToServer();
         initBoardTasks();
     }
@@ -256,17 +246,29 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
 function getshowTaskUserName(contact) {
     let showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
-    if (contact.name) {
-        for (let i = 0; i < contact['name'].length; i++) {
-            const element = contact['name'][i];
+
+    let assignedGuest = contact.assigned_guests;
+    
+    if (assignedGuest) {
+        for (let i = 0; i < assignedGuest.length; i++) {
+            let gast = findeGastNachId(guesteArray, assignedGuest[i]) 
+            let initial = getInitials(gast.name)
+            console.log(initial);
+                     
             showTaskUserName.innerHTML += /*html*/`
                 <div class="show_task_assigned_to_users">                
-                    <div class="board_task_user_initial show_task_user_initial" style="background-color: ${contact.color[i]};">${contact.initial[i]}</div>
-                    <div>${element}</div>
+                    <div class="board_task_user_initial show_task_user_initial" style="background-color: ${ gast.color };">${ initial }</div>
+                    <div>${gast.name}</div>
                 </div>
             `;
+            
         }
     }
+}
+
+
+function findeGastNachId(guesteArray, id) {
+  return guesteArray.find(gast => gast.id === id);
 }
 
 
@@ -331,7 +333,7 @@ function getContactInitialEdit(contact) {
     let task_title_edit = document.getElementById('task_title_edit');
     let task_description_edit = document.getElementById('task_description_edit');
     let task_date_edit = document.getElementById('task_date_edit');
-
+    
     task_title_edit.value = contact.title;
     task_description_edit.value = contact.description;
     task_date_edit.value = contact.date;
@@ -429,7 +431,6 @@ async function addEditSubtask(i, id) {
     let contact = todos.find(obj => obj['id'] == id);
     let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`);
     contact.subtasks[i] = show_task_subtask_edit_input.value;
-    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -448,7 +449,6 @@ async function addEditSubtask(i, id) {
 async function showTaskDeleteSubtask(i, id) {
     let contact = todos.find(obj => obj['id'] == id);
     contact.subtasks.splice(i, 1);
-    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -472,7 +472,6 @@ async function addNewSubTaskEdit(id) {
         contact.subtasks.push(task_subtasks_edit);
     }
     task_subtasks.value = '';
-    // saveTaskToLocalStorage();
     await saveTasksToServer();
     getSubtaskEdit(contact);
     initBoardTasks();
@@ -558,7 +557,6 @@ function updateTaskCategory(contact) {
  * asynchronously.
  */
 async function saveTaskUpdates() {
-    // saveTaskToLocalStorage();
     await saveTasksToServer();
 }
 
@@ -612,6 +610,8 @@ function searchTaskFromBoard() {
  * then
  */
 function getInitialsArray(element) {
+    console.log(element);
+    
     let initialsArray = element.initial;
     let colorsArray = element.color;
     let showCircleWithInitials = 3;
