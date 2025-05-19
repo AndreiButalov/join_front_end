@@ -253,7 +253,6 @@ function getshowTaskUserName(contact) {
         for (let i = 0; i < assignedGuest.length; i++) {
             let gast = findeGastNachId(guesteArray, assignedGuest[i]) 
             let initial = getInitials(gast.name)
-            console.log(initial);
                      
             showTaskUserName.innerHTML += /*html*/`
                 <div class="show_task_assigned_to_users">                
@@ -609,16 +608,24 @@ function searchTaskFromBoard() {
  * colors arrays from the `element` object, sets a limit for the number of initials to display, and
  * then
  */
-function getInitialsArray(element) {
-    console.log(element);
+function getInitialsArray(element) {  
     
-    let initialsArray = element.initial;
-    let colorsArray = element.color;
+    let ids = element.assigned_guests
+    let initialsArray = [];
+    let colorsArray = [];
     let showCircleWithInitials = 3;
+    
+    for (let i = 0; i < ids.length; i ++) {
+       let gast = findeGastNachId(guesteArray, ids[i]) 
+       initialsArray.push(getInitials(gast.name))
+       colorsArray.push(gast.color)       
+    }
+
     if (initialsArray) {
         let showCircleWithRestOfPersons = initialsArray.length - showCircleWithInitials;
         let boardTaskInitial = document.getElementById(`board_task_initial${element.id}`);
         boardTaskInitial.innerHTML = '';
+
         for (let j = 0; j < initialsArray.length; j++) {
             let initial = initialsArray[j];
             let color = colorsArray[j];
