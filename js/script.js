@@ -45,7 +45,8 @@ let user = {
   name: 'Gast',
   email: 'gast@join.com',
   initials: 'G',
-  color: '#FC71FF'
+  color: '#FC71FF',
+  // passwort: '0000'
 }
 getCurrentUserFromLocalStorage();
 

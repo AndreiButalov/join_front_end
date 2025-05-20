@@ -1,4 +1,4 @@
-const BASE_URL = 'https://join-b0cbf-default-rtdb.europe-west1.firebasedatabase.app/';
+const BASE_URL = 'http://127.0.0.1:8000/api/';
 SetRememberData();
 checkIsUserLoginFromLastSession();
 
@@ -20,7 +20,7 @@ function showLoginBox() {
     document.getElementById('login-section').classList.replace('d-none', 'd-center');
     document.getElementById('register-section').classList.replace('d-center', 'd-none');
     document.getElementById('signup-button-area').classList.replace('d-none', 'signUp');
-    document.getElementById('signUp-mobile-section').classList.replace('d-none','signUp-mobile');
+    document.getElementById('signUp-mobile-section').classList.replace('d-none', 'signUp-mobile');
     document.getElementById('login-section').classList.remove('fade-in');
     document.getElementById('register-section').classList.remove('fade-in');
     document.getElementById('signup-button-area').classList.remove('fade-in');
@@ -45,8 +45,8 @@ function checkIsUserLoginFromLastSession() {
  * @returns the JSON from download
  */
 
-async function loadData(path = '') {
-    let response = await fetch(BASE_URL + path + '.json');
+async function loadData() {
+    let response = await fetch(`${BASE_URL}users`);
     let responseToJson = await response.json();
     return responseToJson;
 }
@@ -59,15 +59,21 @@ async function loadData(path = '') {
  * @returns 
  */
 
-async function postData(path = '', data = {}) {
-    let response = await fetch(BASE_URL + path + '.json', {
-        method: 'PUT',
-        header: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-    });
-    return responseToJson = await response.json();
+async function postData(data) {
+    try {
+        const response = await fetch(`${BASE_URL}users/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    } catch (error) {
+        console.error('Failed to save tasks to server:', error);
+    }
 }
 
 /**
@@ -78,8 +84,7 @@ async function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     const rememberMe = document.getElementById('login-rememberme').checked;
-    const data = await loadData('/users');
-    let indexOfEmail;
+    const data = await loadData('users');
 
     if (checkEmailInDB(data, email) && checkPasswortInDB(data, password)) {
         setCurrentUserInLocalStorage(data);
@@ -185,7 +190,7 @@ function removeEmailFromLocalstorage() {
 async function SetRememberData() {
     const email = localStorage.getItem('login-name');
     if (email !== null) {
-        const data = await loadData('/users');
+        const data = await loadData();
         const indexOfEmail = data.findIndex(element => element['email'] == email);
         const password = data[indexOfEmail]['password'];
         document.getElementById('login-email').value = email;
@@ -204,24 +209,31 @@ async function register() {
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register1-password').value;
     const passwordCheck = document.getElementById('register2-password').value;
-    const listOfUser = await loadData('/users');
+    const users = await loadData();
 
-    if (password == passwordCheck && !checkEmailInDB(listOfUser, email)) {
-        listOfUser.push(
-            {
-                'name': name,
-                'email': email,
-                'password': password,
-                'color': randomContactColor(),
-            }
-        );
-        postData('/users', listOfUser);
-        signUpSuccesfullyInfoBox('show');
-        setTimeout(() => { showLoginBox() }, 2000);
-        setTimeout(() => { signUpSuccesfullyInfoBox('hide') }, 2000);
-    } else {
+    if (password !== passwordCheck) {
         noMatchingPassword('show');
+        return;
     }
+
+    // Überprüfe, ob die E-Mail bereits existiert
+    if (checkEmailInDB(users, email)) {
+        alert("Die E-Mail existiert bereits.");
+        return;
+    }
+
+    // Wenn alles in Ordnung ist, fahre mit der Registrierung fort
+    let listOfUser = {
+        'color': randomContactColor(),
+        'email': email,
+        'name': name,
+        'password': password,
+    };
+
+    postData(listOfUser);
+    signUpSuccesfullyInfoBox('show');
+    setTimeout(() => { showLoginBox(); }, 2000);
+    setTimeout(() => { signUpSuccesfullyInfoBox('hide'); }, 2000);
 }
 
 /**
@@ -389,20 +401,20 @@ function randomNumber(min, max) {
 }
 
 const contactColor = {
-    1: "rgb(255, 187, 44)",
-    2: "rgb(255, 70, 70)",
-    3: "rgb(255, 230, 44)",
-    4: "rgb(195, 255, 43)",
-    5: "rgb(0, 56, 255)",
-    6: "rgb(255, 199, 3)",
-    7: "rgb(252, 113, 255)",
-    8: "rgb(255, 163, 94)",
-    9: "rgb(32, 215, 194)",
-    10: "rgb(6, 190, 232)",
-    11: "rgb(147, 39, 255)",
-    12: "rgb(110, 82, 255)",
-    13: "rgb(255, 94, 179)",
-    14: "rgb(255, 122, 1)",
+    1: "#FFBB2C",
+    2: "#FF4646",
+    3: "#FFE62C",
+    4: "#C3FF2B",
+    5: "#0038FF",
+    6: "#FFC703",
+    7: "#FC71FF",
+    8: "#FFA35E",
+    9: "#20D7C2",
+    10: "#06BEE8",
+    11: "#9327FF",
+    12: "#6E52FF",
+    13: "#FF5EB3",
+    14: "#FF7A01",
 };
 
 function postTestData() {

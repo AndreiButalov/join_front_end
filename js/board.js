@@ -11,7 +11,6 @@ let initials = [];
 let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
-let guesteContacts = [];
 
 
 /**
@@ -20,7 +19,7 @@ let guesteContacts = [];
  */
 async function saveTasksToServer(task) {
     try {
-        const response = await fetch(`${BASE_URL}tasks/`, {
+        const response = await fetch(`${ BASE_URL }tasks/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,7 +41,7 @@ async function saveTasksToServer(task) {
  */
 async function loadTasksFromServer() {
     try {
-        const response = await fetch(`${BASE_URL}tasks`);
+        const response = await fetch(`${ BASE_URL }tasks`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
@@ -70,7 +69,7 @@ async function deleteTaskFromLocalStorage(id) {
 
     todos = todos.filter(todo => todo.id !== id);
     try {
-        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
+        const response = await fetch(`${ BASE_URL }tasks/${id}/`, {
             method: 'DELETE'
         });
 
@@ -89,7 +88,7 @@ async function deleteTaskFromLocalStorage(id) {
 
 async function updateTaskOnServer(id, updatedFields) {
     try {
-        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
+        const response = await fetch(`${ BASE_URL }tasks/${id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'

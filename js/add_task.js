@@ -83,10 +83,7 @@ async function addTaskToTasks(column) {
         'category': column,
         'date': document.getElementById('task_date').value,
         'description': document.getElementById('task_description').value,
-        // 'id': generateUniqueId(),
         'assigned_guests': idList,
-        // 'initial': initials,
-        // 'color': colorList,
         'priorityImg': getPriorityImage(userPriotity),
         'priority': getUserPriorityStatus(userPriotity),
         'status': document.getElementById('task_category').value,
@@ -94,8 +91,6 @@ async function addTaskToTasks(column) {
         // 'subtasks': subtasks,
         // 'selectedTask': [],
     };
-
-    // todos.push(task);
 
     await saveTasksToServer(task);
     if (window.location.href.includes('board.html')) {
@@ -168,21 +163,6 @@ function slideInConfirmation() {
 
 
 /**
- * The function `generateUniqueId` generates a unique random ID within a range and ensures it is not
- * already in use.
- * @returns The function `generateUniqueId` returns a randomly generated unique ID as a string.
- */
-function generateUniqueId() {
-    let id;
-    do {
-        id = Math.floor(Math.random() * 1000000).toString();
-    } while (usedIds.has(id));
-    usedIds.add(id);
-    return id;
-}
-
-
-/**
  * The function `getTaskPriority` toggles the active state of a button and sets the user priority based
  * on the button's text content.
  * @param id - The `id` parameter in the `getTaskPriority` function is used to identify the specific
@@ -233,7 +213,7 @@ function generateCheckBoxName() {
     const selectedGuests = Array.from(document.querySelectorAll('input[name="optionen"]:checked'))
         .map(checkbox => guesteArray.find(g => g.name === checkbox.value))
         .filter(Boolean);
-
+    
     selectedGuests.forEach(guest => {
         idList.push(guest.id)
         namelist.push(guest.name);
