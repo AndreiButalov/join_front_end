@@ -108,6 +108,7 @@ function guestLogin() {
  * this function is used to set a default user for the guestlogin
  */
 function setDefaultUser() {
+    
     let defaultUser = {
         name: 'Gast',
         email: 'gast@join.com',
@@ -117,6 +118,14 @@ function setDefaultUser() {
     }
     localStorage.setItem('currentUser', JSON.stringify(defaultUser));
 }
+
+//let defaultUser = {
+    //     name: gastEintrag.name,
+    //     email: gastEintrag.email,
+    //     password: gastEintrag.password,
+    //     color: gastEintrag.color,
+    //     initials: getInitials(gastEintrag.name)
+    // }
 
 /**
  * this function is used to set the current user in localstorage
@@ -131,6 +140,9 @@ function setCurrentUserInLocalStorage(data) {
         color: data[indexOfEmail].color,
         initials: getInitials(data[indexOfEmail]),
     }
+
+    console.log(user);
+    
     localStorage.setItem('currentUser', JSON.stringify(user));
 }
 

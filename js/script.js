@@ -44,9 +44,8 @@ let popUpAction = false;
 let user = {
   name: 'Gast',
   email: 'gast@join.com',
-  initials: 'G',
+  initials: 'S',
   color: '#FC71FF',
-  // passwort: '0000'
 }
 getCurrentUserFromLocalStorage();
 
@@ -148,15 +147,15 @@ function getCurrentUserFromLocalStorage() {
 function setInitialsInHeader() {
   headInnitials = document.getElementById('headInnitials');
   if (user['name'] !== 'Gast') {
-    headInnitials.innerHTML = `${user['initials']}`;
+    headInnitials.innerHTML = `${getInitials(user['name'])}`;
   } else {
     headInnitials.innerHTML = 'G';
   }
 
-  if (user['initials'].length === 2) {
+  if (getInitials(user['name']).length === 2) {
     headInnitials.classList.remove('font-size-28px');
     headInnitials.classList.add('font-size-20px');
-  } else if (user['initials'].length === 1) {
+  } else if (getInitials(user['name']).length === 1) {
     headInnitials.classList.remove('font-size-20px');
     headInnitials.classList.add('font-size-28px');
   }
