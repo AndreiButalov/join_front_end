@@ -57,6 +57,8 @@ getCurrentUserFromLocalStorage();
  */
 async function init() {
   await getData();
+  console.log(user);
+  
   isUserOfflineHideNavBar();
   isUserOfflineHideMobileNavBar();
   setInitialsInHeader();

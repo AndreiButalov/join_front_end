@@ -99,33 +99,25 @@ async function login() {
  * this function is used to login with the guest user
  */
 
-function guestLogin() {
-    setDefaultUser();
+ async function guestLogin() {
+    const data = await loadData('users');
+    setDefaultUser(data);
     window.location.href = 'summary.html';
 }
 
 /**
  * this function is used to set a default user for the guestlogin
  */
-function setDefaultUser() {
-    
+function setDefaultUser(data) {
+    const gastEintrag = data.find(item => item.name === "Gast");    
     let defaultUser = {
-        name: 'Gast',
-        email: 'gast@join.com',
-        password: '0123456789',
-        color: '#FC71FF',
-        initials: 'G'
+        name: gastEintrag.name,
+        email: gastEintrag.email,
+        password: gastEintrag.password,
+        color: gastEintrag.color,
     }
     localStorage.setItem('currentUser', JSON.stringify(defaultUser));
 }
-
-//let defaultUser = {
-    //     name: gastEintrag.name,
-    //     email: gastEintrag.email,
-    //     password: gastEintrag.password,
-    //     color: gastEintrag.color,
-    //     initials: getInitials(gastEintrag.name)
-    // }
 
 /**
  * this function is used to set the current user in localstorage
@@ -138,10 +130,7 @@ function setCurrentUserInLocalStorage(data) {
         name: data[indexOfEmail].name,
         email: data[indexOfEmail].email,
         color: data[indexOfEmail].color,
-        initials: getInitials(data[indexOfEmail]),
     }
-
-    console.log(user);
     
     localStorage.setItem('currentUser', JSON.stringify(user));
 }
