@@ -366,7 +366,7 @@ function generateSelectedNames(contact) {
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
     }
-    
+
     if (selectedNames) {
         for (let i = 0; i < selectedNames.length; i++) {
             let gast = findeGastNachId(guesteArray, assignedGuest[i])
@@ -628,32 +628,23 @@ function searchTaskFromBoard() {
  * then
  */
 function getInitialsArray(element) {
+    const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
+    const guests = [];
 
-    let ids = element.assigned_guests
-    let initialsArray = [];
-    let colorsArray = [];
-    let showCircleWithInitials = 3;
+    if (userId) guests.push(findeGastNachId(guesteArray, userId));
+    guestIds.forEach(id => guests.push(findeGastNachId(guesteArray, id)));
 
-    for (let i = 0; i < ids.length; i++) {
-        let gast = findeGastNachId(guesteArray, ids[i])
-        initialsArray.push(getInitials(gast.name))
-        colorsArray.push(gast.color)
-    }
+    const initialsArray = guests.map(g => getInitials(g.name));
+    const colorsArray = guests.map(g => g.color);
+    const showLimit = 3;
+    const boardTaskInitial = document.getElementById(`board_task_initial${id}`);
+    boardTaskInitial.innerHTML = '';
 
-    if (initialsArray) {
-        let showCircleWithRestOfPersons = initialsArray.length - showCircleWithInitials;
-        let boardTaskInitial = document.getElementById(`board_task_initial${element.id}`);
-        boardTaskInitial.innerHTML = '';
-
-        for (let j = 0; j < initialsArray.length; j++) {
-            let initial = initialsArray[j];
-            let color = colorsArray[j];
-            if (j < showCircleWithInitials) {
-                boardTaskInitial.innerHTML += createInitialBlock(initial, color);
-            } else {
-                boardTaskInitial.innerHTML += createRemainingPersonsBlock(showCircleWithRestOfPersons);
-                break;
-            }
+    initialsArray.forEach((initial, i) => {
+        if (i < showLimit) {
+            boardTaskInitial.innerHTML += createInitialBlock(initial, colorsArray[i]);
+        } else if (i === showLimit) {
+            boardTaskInitial.innerHTML += createRemainingPersonsBlock(initialsArray.length - showLimit);
         }
-    }
+    });
 }
