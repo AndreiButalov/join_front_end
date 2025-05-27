@@ -11,7 +11,6 @@ let initials = [];
 let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
-const guests = [];
 
 /**
  * The function `saveTasksToServer` asynchronously saves tasks to a server using a PUT request with
@@ -245,7 +244,7 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
 function getshowTaskUserName(contact) {
     const showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
-    // const guests = [];
+    const guests = [];
 
     if (contact.assigned_user) {
         const gast = findeGastNachId(guesteArray, contact.assigned_user);
@@ -268,7 +267,6 @@ function getshowTaskUserName(contact) {
             </div>
         `;
     });
-    console.log(guests);
     
 }
 
