@@ -244,6 +244,21 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
 function getshowTaskUserName(contact) {
     const showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
+
+    getSelectedUsers(contact).forEach(gast => {
+        const initial = getInitials(gast.name);
+        showTaskUserName.innerHTML += `
+            <div class="show_task_assigned_to_users">                
+                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
+                <div>${gast.name}</div>
+            </div>
+        `;
+    });
+
+}
+
+
+function getSelectedUsers(contact) {
     const guests = [];
 
     if (contact.assigned_user) {
@@ -257,17 +272,7 @@ function getshowTaskUserName(contact) {
             if (gast) guests.push(gast);
         });
     }
-
-    guests.forEach(gast => {
-        const initial = getInitials(gast.name);
-        showTaskUserName.innerHTML += `
-            <div class="show_task_assigned_to_users">                
-                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
-                <div>${gast.name}</div>
-            </div>
-        `;
-    });
-    
+    return guests
 }
 
 
@@ -357,26 +362,13 @@ function generateSelectedNames(contact) {
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
 
-    let assignedGuest = contact.assigned_guests;
-    let assignedUser = contact.assigned_user;
-    if (assignedUser) {
-        let gast = findeGastNachId(guesteArray, assignedUser)
-        let initial = getInitials(gast.name)        
-        task_edit_initial.innerHTML += `
-                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
-                `;
-    }
-
-    if (selectedNames) {
-        for (let i = 0; i < selectedNames.length; i++) {
-            let gast = findeGastNachId(guesteArray, assignedGuest[i])
+    if (getSelectedUsers(contact)) {
+        getSelectedUsers(contact).forEach(gast => {
             let initial = getInitials(gast.name)
             task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
-        }
-    } else {
-        task_edit_initial.innerHTML = '';
+        });
     }
 }
 
@@ -508,7 +500,7 @@ async function upgradeTodos(id) {
     const contact = todos.find(obj => obj.id == id);
     if (!contact) return;
     console.log(selectedNames);
-    
+
 
     const updatedFields = {
         ...getUpdatedContactDetails(),
@@ -518,7 +510,7 @@ async function upgradeTodos(id) {
     };
 
     console.log(contact);
-    
+
 
     // await updateTaskOnServer(id, updatedFields);
     // reloadUI();
@@ -553,7 +545,7 @@ function getUpdatedGuestInfo() {
     // const guestColor = [];
 
     console.log(selectedNames);
-    
+
     // const initials = [];
 
     // selectedNames.forEach(element => {

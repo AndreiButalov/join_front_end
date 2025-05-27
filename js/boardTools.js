@@ -46,32 +46,24 @@ function getInitials(name) {
  */
 function getcheckBoxesEdit(id) {
     let contact = todos.find(obj => obj['id'] == id);
-
     let checkBoxesEdit = document.getElementById('checkBoxesEdit');
     checkBoxesEdit.innerHTML = '';
-    let assignedGuest = contact.assigned_guests;
-    let assignedUser = contact.assigned_user;
 
-    let names = [];
-    let userName;
+    let selectedUser = getSelectedUsers(contact);
+    selectedNames = [];
 
-    if (assignedUser) {
-        let user = findeGastNachId(guesteArray, assignedUser)
-        userName = user.name
-    }
+    selectedUser.forEach(user => {
+        selectedNames.push(user.name);
+    });
 
-    for (let i = 0; i < assignedGuest.length; i++) {
-        let gast = findeGastNachId(guesteArray, assignedGuest[i])
-        names.push(gast.name)
-    }
-
-    selectedNames = names ? [...names] : [];
+    console.log(selectedNames);
 
     checkBoxesEdit.innerHTML = guesteArray.map(guest => {
-        let isChecked = (names && names.includes(guest.name)) || (userName === guest.name);
+        let isChecked = selectedNames.includes(guest.name);
         let initial = getInitials(guest.name);
         return rendergetcheckBoxesEdit(guest, initial, isChecked);
     }).join('');
+
     document.querySelectorAll('#checkBoxesEdit input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', updateSelectedNames);
     });
@@ -92,9 +84,6 @@ function getcheckBoxesEdit(id) {
 function updateSelectedNames(event) {
     let checkbox = event.target;
     let name = checkbox.value;
-    console.log(name);
-    console.log(selectedNames);
-    
     
     if (checkbox.checked) {
         if (!selectedNames.includes(name)) {
