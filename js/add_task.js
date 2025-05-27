@@ -5,6 +5,8 @@ let userPriotity;
 let imgPriority;
 let addTaskProcess = false;
 let idList = [];
+let userId;
+let currentUser
 
 
 /**
@@ -30,13 +32,23 @@ async function loadGuestFromServer() {
 }
 
 
+function getCurrentUserFromLocalStorage() {
+    let currentUserString = localStorage.getItem('currentUser');
+    if (currentUserString != null || currentUserString != '') {
+        currentUser = JSON.parse(currentUserString);
+    }
+}
+
 /**
  * The `initAddTask` function asynchronously loads guest and tasks from the server, generates
  * checkboxes, and adds an event listener to checkboxes to get their values.
  */
 async function initAddTask() {
+    getCurrentUserFromLocalStorage()
     await loadGuestFromServer();
     await loadTasksFromServer();
+
+
     generateCheckBox();
     document.querySelectorAll('input[name="optionen"]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {
@@ -84,6 +96,7 @@ async function addTaskToTasks(column) {
         'date': document.getElementById('task_date').value,
         'description': document.getElementById('task_description').value,
         'assigned_guests': idList,
+        'assigned_user': userId,
         'priorityImg': getPriorityImage(userPriotity),
         'priority': getUserPriorityStatus(userPriotity),
         'status': document.getElementById('task_category').value,
@@ -91,6 +104,8 @@ async function addTaskToTasks(column) {
         // 'subtasks': subtasks,
         // 'selectedTask': [],
     };
+
+
 
     await saveTasksToServer(task);
     if (window.location.href.includes('board.html')) {
@@ -213,12 +228,16 @@ function generateCheckBoxName() {
     const selectedGuests = Array.from(document.querySelectorAll('input[name="optionen"]:checked'))
         .map(checkbox => guesteArray.find(g => g.name === checkbox.value))
         .filter(Boolean);
-    
     selectedGuests.forEach(guest => {
-        idList.push(guest.id)
-        namelist.push(guest.name);
-        colorList.push(guest.color);
-        initials.push(getInitials(guest.name));
+        if (guest.name === currentUser.name) {
+            userId = guest.id;
+
+            // userName.push(guest.name);
+            // userColor.push(guest.color);
+            // userInitials.push(getInitials(guest.name));
+        } else {
+            idList.push(guest.id);
+        }
     });
 }
 

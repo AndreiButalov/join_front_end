@@ -127,6 +127,7 @@ function setDefaultUser(data) {
 
 function setCurrentUserInLocalStorage(data) {
     let user = {
+        id: data[indexOfEmail].id,
         name: data[indexOfEmail].name,
         email: data[indexOfEmail].email,
         color: data[indexOfEmail].color,
