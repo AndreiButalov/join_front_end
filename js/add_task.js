@@ -230,11 +230,7 @@ function generateCheckBoxName() {
         .filter(Boolean);
     selectedGuests.forEach(guest => {
         if (guest.name === currentUser.name) {
-            userId = guest.id;
-
-            // userName.push(guest.name);
-            // userColor.push(guest.color);
-            // userInitials.push(getInitials(guest.name));
+            userId = guest.id;           
         } else {
             idList.push(guest.id);
         }

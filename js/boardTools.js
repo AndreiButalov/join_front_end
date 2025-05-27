@@ -45,25 +45,33 @@ function getInitials(name) {
  * populate and update a list of checkboxes in the HTML with the corresponding names and initials.
  */
 function getcheckBoxesEdit(id) {
-    let contact = todos.find(obj => obj['id'] == id);        
+    let contact = todos.find(obj => obj['id'] == id);
+
     let checkBoxesEdit = document.getElementById('checkBoxesEdit');
     checkBoxesEdit.innerHTML = '';
-    let assignedGuest = contact.assigned_guests;    
-    let names = [];
+    let assignedGuest = contact.assigned_guests;
+    let assignedUser = contact.assigned_user;
 
-    for(let i = 0; i < assignedGuest.length; i++) {
-        let gast = findeGastNachId(guesteArray, assignedGuest[i])
-        names.push(gast.name)  
+    let names = [];
+    let userName;
+
+    if (assignedUser) {
+        let user = findeGastNachId(guesteArray, assignedUser)
+        userName = user.name
     }
-    
+
+    for (let i = 0; i < assignedGuest.length; i++) {
+        let gast = findeGastNachId(guesteArray, assignedGuest[i])
+        names.push(gast.name)
+    }
+
     selectedNames = names ? [...names] : [];
-    
+
     checkBoxesEdit.innerHTML = guesteArray.map(guest => {
-        let isChecked = names ? names.includes(guest.name) : false;
+        let isChecked = (names && names.includes(guest.name)) || (userName === guest.name);
         let initial = getInitials(guest.name);
         return rendergetcheckBoxesEdit(guest, initial, isChecked);
     }).join('');
-
     document.querySelectorAll('#checkBoxesEdit input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', updateSelectedNames);
     });
@@ -290,7 +298,7 @@ function highlightTaskCategory(id) {
 
 function removeHighlightTaskCategory(id) {
     let ID = id
-    if(ID === 'board_awaitt'){
+    if (ID === 'board_awaitt') {
         ID = 'board_await_feedback';
     }
     document.getElementById(ID).classList.remove('drag-area-highlight');

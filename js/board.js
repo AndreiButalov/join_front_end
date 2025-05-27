@@ -19,7 +19,7 @@ let selectedNames = [];
  */
 async function saveTasksToServer(task) {
     try {
-        const response = await fetch(`${ BASE_URL }tasks/`, {
+        const response = await fetch(`${BASE_URL}tasks/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ async function saveTasksToServer(task) {
  */
 async function loadTasksFromServer() {
     try {
-        const response = await fetch(`${ BASE_URL }tasks`);
+        const response = await fetch(`${BASE_URL}tasks`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
@@ -69,7 +69,7 @@ async function deleteTaskFromLocalStorage(id) {
 
     todos = todos.filter(todo => todo.id !== id);
     try {
-        const response = await fetch(`${ BASE_URL }tasks/${id}/`, {
+        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
             method: 'DELETE'
         });
 
@@ -88,7 +88,7 @@ async function deleteTaskFromLocalStorage(id) {
 
 async function updateTaskOnServer(id, updatedFields) {
     try {
-        const response = await fetch(`${ BASE_URL }tasks/${id}/`, {
+        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -113,8 +113,8 @@ async function updateTaskOnServer(id, updatedFields) {
 async function initBoardTasks() {
     await loadTasksFromServer();
     await loadGuestFromServer();
-    
-    
+
+
     let task = document.getElementById('board_to_do');
     let progress = document.getElementById('board_in_progress');
     let awaitFeedback = document.getElementById('board_await_feedback');
@@ -217,7 +217,7 @@ async function generateShowTask(id) {
  * `false`, it means the subtask is not checked.
  */
 async function updateSubtaskStatus(contact, subtask, isChecked) {
-    
+
     if (contact) {
         if (!contact.selectedTask) {
             contact.selectedTask = [];
@@ -243,30 +243,36 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
  * assist you further with the `getshowTaskUserName` function?
  */
 function getshowTaskUserName(contact) {
-    let showTaskUserName = document.getElementById('show_task_user_name');
+    const showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
+    const guests = [];
 
-    let assignedGuest = contact.assigned_guests;
-    
-    if (assignedGuest) {
-        for (let i = 0; i < assignedGuest.length; i++) {
-            let gast = findeGastNachId(guesteArray, assignedGuest[i]) 
-            let initial = getInitials(gast.name)
-                     
-            showTaskUserName.innerHTML += /*html*/`
-                <div class="show_task_assigned_to_users">                
-                    <div class="board_task_user_initial show_task_user_initial" style="background-color: ${ gast.color };">${ initial }</div>
-                    <div>${gast.name}</div>
-                </div>
-            `;
-            
-        }
+    if (contact.assigned_user) {
+        const gast = findeGastNachId(guesteArray, contact.assigned_user);
+        if (gast) guests.push(gast);
     }
+
+    if (Array.isArray(contact.assigned_guests)) {
+        contact.assigned_guests.forEach(id => {
+            const gast = findeGastNachId(guesteArray, id);
+            if (gast) guests.push(gast);
+        });
+    }
+
+    guests.forEach(gast => {
+        const initial = getInitials(gast.name);
+        showTaskUserName.innerHTML += `
+            <div class="show_task_assigned_to_users">                
+                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
+                <div>${gast.name}</div>
+            </div>
+        `;
+    });
 }
 
 
 function findeGastNachId(guesteArray, id) {
-  return guesteArray.find(gast => gast.id === id);
+    return guesteArray.find(gast => gast.id === id);
 }
 
 
@@ -331,11 +337,10 @@ function getContactInitialEdit(contact) {
     let task_title_edit = document.getElementById('task_title_edit');
     let task_description_edit = document.getElementById('task_description_edit');
     let task_date_edit = document.getElementById('task_date_edit');
-    
+
     task_title_edit.value = contact.title;
     task_description_edit.value = contact.description;
     task_date_edit.value = contact.date;
-
     generateSelectedNames(contact);
 }
 
@@ -353,13 +358,21 @@ function generateSelectedNames(contact) {
     task_edit_initial.innerHTML = '';
 
     let assignedGuest = contact.assigned_guests;
+    let assignedUser = contact.assigned_user;
+    if (assignedUser) {
+        let gast = findeGastNachId(guesteArray, assignedUser)
+        let initial = getInitials(gast.name)
+        task_edit_initial.innerHTML += `
+                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
+                `;
+    }
     
     if (selectedNames) {
         for (let i = 0; i < selectedNames.length; i++) {
-            let gast = findeGastNachId(guesteArray, assignedGuest[i]) 
+            let gast = findeGastNachId(guesteArray, assignedGuest[i])
             let initial = getInitials(gast.name)
             task_edit_initial.innerHTML += `
-                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color };">${initial}</div>
+                <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
         }
     } else {
@@ -614,17 +627,17 @@ function searchTaskFromBoard() {
  * colors arrays from the `element` object, sets a limit for the number of initials to display, and
  * then
  */
-function getInitialsArray(element) {  
-    
+function getInitialsArray(element) {
+
     let ids = element.assigned_guests
     let initialsArray = [];
     let colorsArray = [];
     let showCircleWithInitials = 3;
-    
-    for (let i = 0; i < ids.length; i ++) {
-       let gast = findeGastNachId(guesteArray, ids[i]) 
-       initialsArray.push(getInitials(gast.name))
-       colorsArray.push(gast.color)       
+
+    for (let i = 0; i < ids.length; i++) {
+        let gast = findeGastNachId(guesteArray, ids[i])
+        initialsArray.push(getInitials(gast.name))
+        colorsArray.push(gast.color)
     }
 
     if (initialsArray) {
