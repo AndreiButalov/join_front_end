@@ -92,6 +92,10 @@ function getcheckBoxesEdit(id) {
 function updateSelectedNames(event) {
     let checkbox = event.target;
     let name = checkbox.value;
+    console.log(name);
+    console.log(selectedNames);
+    
+    
     if (checkbox.checked) {
         if (!selectedNames.includes(name)) {
             selectedNames.push(name);

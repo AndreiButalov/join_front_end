@@ -11,7 +11,7 @@ let initials = [];
 let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
-
+const guests = [];
 
 /**
  * The function `saveTasksToServer` asynchronously saves tasks to a server using a PUT request with
@@ -245,7 +245,7 @@ async function updateSubtaskStatus(contact, subtask, isChecked) {
 function getshowTaskUserName(contact) {
     const showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
-    const guests = [];
+    // const guests = [];
 
     if (contact.assigned_user) {
         const gast = findeGastNachId(guesteArray, contact.assigned_user);
@@ -268,6 +268,8 @@ function getshowTaskUserName(contact) {
             </div>
         `;
     });
+    console.log(guests);
+    
 }
 
 
@@ -361,7 +363,7 @@ function generateSelectedNames(contact) {
     let assignedUser = contact.assigned_user;
     if (assignedUser) {
         let gast = findeGastNachId(guesteArray, assignedUser)
-        let initial = getInitials(gast.name)
+        let initial = getInitials(gast.name)        
         task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
@@ -505,13 +507,23 @@ async function addNewSubTaskEdit(id) {
  * array based on the provided `id`.
  */
 async function upgradeTodos(id) {
-    let contact = todos.find(obj => obj['id'] == id);
-    updateContactDetails(contact);
-    updateGuestInfo(contact);
-    updatePriority(contact);
-    updateTaskCategory(contact);
-    await saveTaskUpdates();
-    reloadUI();
+    const contact = todos.find(obj => obj.id == id);
+    if (!contact) return;
+    console.log(selectedNames);
+    
+
+    const updatedFields = {
+        ...getUpdatedContactDetails(),
+        ...getUpdatedGuestInfo(),
+        ...getUpdatedPriority(),
+        ...getUpdatedTaskCategory()
+    };
+
+    console.log(contact);
+    
+
+    // await updateTaskOnServer(id, updatedFields);
+    // reloadUI();
 }
 
 
@@ -521,12 +533,14 @@ async function upgradeTodos(id) {
  * @param contact - The `contact` parameter is an object that represents a contact or task. It contains
  * the following properties:
  */
-function updateContactDetails(contact) {
-    contact.title = document.getElementById('task_title_edit').value;
-    contact.description = document.getElementById('task_description_edit').value;
-    contact.date = document.getElementById('task_date_edit').value;
-    contact.assignedTo = document.getElementById('task_assignet_input_edit').value;
-    contact.name = selectedNames;
+function getUpdatedContactDetails() {
+    return {
+        title: document.getElementById('task_title_edit').value,
+        description: document.getElementById('task_description_edit').value,
+        date: document.getElementById('task_date_edit').value,
+        assignedTo: document.getElementById('task_assignet_input_edit').value,
+        // name: selectedNames
+    };
 }
 
 
@@ -537,16 +551,25 @@ function updateContactDetails(contact) {
  * as their name, color, and initials. The `updateGuestInfo` function takes this `contact` object and
  * updates its `color` and `initial` properties based on the selected guest names in the `selectedNames
  */
-function updateGuestInfo(contact) {
-    let guestColor = [];
-    let initials = [];
-    selectedNames.forEach(element => {
-        let guest = guesteArray.find(guest => guest.name === element);
-        guestColor.push(guest.color);
-        initials.push(getInitials(guest.name));
-    });
-    contact.color = guestColor;
-    contact.initial = initials;
+function getUpdatedGuestInfo() {
+    // const guestColor = [];
+
+    console.log(selectedNames);
+    
+    // const initials = [];
+
+    // selectedNames.forEach(element => {
+    //     const guest = guesteArray.find(guest => guest.name === element);
+    //     if (guest) {
+    //         guestColor.push(guest.color);
+    //         initials.push(getInitials(guest.name));
+    //     }
+    // });
+
+    // return {
+    //     color: guestColor,
+    //     initial: initials
+    // };
 }
 
 
@@ -558,17 +581,21 @@ function updateGuestInfo(contact) {
  * value of `userPriority`. If `userPriority` is truthy, the function sets the `priority` property of
  * the
  */
-function updatePriority(contact) {
+function getUpdatedPriority() {
     if (userPriotity) {
-        contact.priority = userPriotity;
-        contact.priorityImg = getPriorityUpdateTodos(userPriotity);
+        return {
+            priority: userPriotity,
+            priorityImg: getPriorityUpdateTodos(userPriotity)
+        };
     }
+    return {};
 }
 
-function updateTaskCategory(contact) {
-    contact.category = document.getElementById('task_category_edit').value;
+function getUpdatedTaskCategory() {
+    return {
+        category: document.getElementById('task_category_edit').value
+    };
 }
-
 
 /**
  * The function `saveTaskUpdates` saves task updates to both local storage and the server
