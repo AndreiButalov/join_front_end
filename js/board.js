@@ -499,21 +499,14 @@ async function addNewSubTaskEdit(id) {
 async function upgradeTodos(id) {
     const contact = todos.find(obj => obj.id == id);
     if (!contact) return;
-    console.log(selectedNames);
-
 
     const updatedFields = {
         ...getUpdatedContactDetails(),
-        ...getUpdatedGuestInfo(),
         ...getUpdatedPriority(),
         ...getUpdatedTaskCategory()
     };
-
-    console.log(contact);
-
-
-    // await updateTaskOnServer(id, updatedFields);
-    // reloadUI();
+    await updateTaskOnServer(id, updatedFields);
+    reloadUI();
 }
 
 
@@ -524,42 +517,29 @@ async function upgradeTodos(id) {
  * the following properties:
  */
 function getUpdatedContactDetails() {
+    let userId;
+    let contactsIds = [];
+
+    selectedNames.forEach(name => {
+        let gast = findeGastNachName(guesteArray, name);        
+        gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
+    });
+
+    userId = userId === undefined ? null : userId;
+
     return {
         title: document.getElementById('task_title_edit').value,
         description: document.getElementById('task_description_edit').value,
         date: document.getElementById('task_date_edit').value,
         assignedTo: document.getElementById('task_assignet_input_edit').value,
-        // name: selectedNames
+        assigned_guests: contactsIds,
+        assigned_user: userId
     };
 }
 
 
-/**
- * The function `updateGuestInfo` updates the color and initials of a contact based on selected guest
- * names.
- * @param contact - The `contact` parameter is an object that contains information about a guest, such
- * as their name, color, and initials. The `updateGuestInfo` function takes this `contact` object and
- * updates its `color` and `initial` properties based on the selected guest names in the `selectedNames
- */
-function getUpdatedGuestInfo() {
-    // const guestColor = [];
-
-    console.log(selectedNames);
-
-    // const initials = [];
-
-    // selectedNames.forEach(element => {
-    //     const guest = guesteArray.find(guest => guest.name === element);
-    //     if (guest) {
-    //         guestColor.push(guest.color);
-    //         initials.push(getInitials(guest.name));
-    //     }
-    // });
-
-    // return {
-    //     color: guestColor,
-    //     initial: initials
-    // };
+function findeGastNachName(guesteArray, name) {
+    return guesteArray.find(gast => gast.name === name)
 }
 
 

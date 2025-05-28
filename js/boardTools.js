@@ -56,8 +56,6 @@ function getcheckBoxesEdit(id) {
         selectedNames.push(user.name);
     });
 
-    console.log(selectedNames);
-
     checkBoxesEdit.innerHTML = guesteArray.map(guest => {
         let isChecked = selectedNames.includes(guest.name);
         let initial = getInitials(guest.name);
@@ -83,7 +81,7 @@ function getcheckBoxesEdit(id) {
  */
 function updateSelectedNames(event) {
     let checkbox = event.target;
-    let name = checkbox.value;
+    let name = checkbox.value;    
     
     if (checkbox.checked) {
         if (!selectedNames.includes(name)) {
@@ -95,7 +93,6 @@ function updateSelectedNames(event) {
             selectedNames.splice(index, 1);
         }
     }
-
     updateDisplayedNames();
 }
 
