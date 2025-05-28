@@ -286,6 +286,7 @@ function highlightTaskCategory(id) {
     document.getElementById(id).classList.add('drag-area-highlight');
 }
 
+
 function removeHighlightTaskCategory(id) {
     let ID = id
     if (ID === 'board_awaitt') {
@@ -346,11 +347,12 @@ function closeWindow() {
 function generateCheckBoxSubTask(contact, id) {
     let show_task_subtask = document.getElementById('show_task_subtask');
     show_task_subtask.innerHTML = '';
-    if (contact && contact.subtasks) {
-        for (let i = 0; i < contact.subtasks.length; i++) {
-            const element = contact.subtasks[i];
-
-            show_task_subtask.innerHTML += rendergenerateCheckBoxSubTaskHtml(contact, element, id, i);
+    const result = filterByTask(userSubtask, contact.id);
+    
+    if (contact && result.length > 0) {
+        for (let i = 0; i < result.length; i++) {
+            const element = result[i];
+            show_task_subtask.innerHTML += rendergenerateCheckBoxSubTaskHtml(contact, element.content, id, i);
         }
         document.querySelectorAll(`#show_task_subtask input[type="checkbox"]`).forEach(checkbox => {
             checkbox.addEventListener('change', function () {

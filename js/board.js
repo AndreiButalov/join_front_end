@@ -11,6 +11,7 @@ let initials = [];
 let subtasks = [];
 let selectedSubtasks = [];
 let selectedNames = [];
+let userSubtask = [];
 
 /**
  * The function `saveTasksToServer` asynchronously saves tasks to a server using a PUT request with
@@ -55,6 +56,23 @@ async function loadTasksFromServer() {
     }
 }
 
+
+
+async function loadSubTasksFromServer() {
+    try {
+        const response = await fetch(`${BASE_URL}subtasks`);
+        if (!response.ok) {
+            throw new Error('Netzwerkantwort war nicht ok.');
+        }
+        const data = await response.json();
+        userSubtask = Object.keys(data).map(id => ({
+            id,
+            ...data[id]
+        }));
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten:', error);
+    }
+}
 
 
 /**
@@ -113,6 +131,7 @@ async function updateTaskOnServer(id, updatedFields) {
 async function initBoardTasks() {
     await loadTasksFromServer();
     await loadGuestFromServer();
+    await loadSubTasksFromServer();
 
 
     let task = document.getElementById('board_to_do');
@@ -150,15 +169,17 @@ async function generateToDo(arr, categorie_id, category) {
     if (arr.length) {
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
+            
             categorie_id.innerHTML += renderHtmlToDo(element);
             let idSUb = document.getElementById(`idSUb${element.id}`);
+            const result = filterByTask(userSubtask, element.id);
 
-            if (element.subtasks) {
+            if (result.length > 0) {
                 idSUb.innerHTML = '';
-                idSUb.innerHTML = renderHtmlProgressBarEmpty(element)
-                if (element.selectedTask) {
+                idSUb.innerHTML = renderHtmlProgressBarEmpty(result)
+                if (result) {
                     idSUb.innerHTML = '';
-                    idSUb.innerHTML += renderHtmlProgressBar(element);
+                    idSUb.innerHTML += renderHtmlProgressBar(result);
                 }
             }
             getInitialsArray(element);
@@ -386,14 +407,21 @@ function getSubtaskEdit(contact) {
     let task_subtasks_edit = document.getElementById('show_task_subtask_edit');
     task_subtasks_edit.innerHTML = '';
 
-    if (contact.subtasks) {
-        for (let i = 0; i < contact.subtasks.length; i++) {
-            const element = contact.subtasks[i];
-            task_subtasks_edit.innerHTML += rendergetSubtaskEditHtml(element, contact, i);
+    const result = filterByTask(userSubtask, contact.id);    
+
+    if (result) {
+        for (let i = 0; i < result.length; i++) {
+            const element = result[i];
+            task_subtasks_edit.innerHTML += rendergetSubtaskEditHtml(element.content, i);
         }
     } else {
         task_subtasks_edit.innerHTML = '';
     }
+}
+
+
+function filterByTask(dataArray, taskId) {
+  return dataArray.filter(item => item.task === taskId);
 }
 
 

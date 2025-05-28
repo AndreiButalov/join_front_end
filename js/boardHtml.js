@@ -37,8 +37,8 @@ function renderHtmlToDo(element) {
  * total subtasks.
  */
 function renderHtmlProgressBar(element) {
-    let currentAllSubtask = element.subtasks.length;
-    let currentSelectedSubtask = element.selectedTask.length;
+    let currentAllSubtask = element.length;
+    let currentSelectedSubtask = 1;
 
     let width = (currentSelectedSubtask / currentAllSubtask * 100).toFixed(0);
     return `
@@ -68,19 +68,19 @@ function renderHtmlProgressBar(element) {
  * on the `element.id`, a subtask count, and the total number of subtasks for the task.
  */
 function renderHtmlProgressBarEmpty(element) {
-    return `
-            <div class="board_task_progress_line">
-        <div class="board_task_progressbar">
-            <div id="progressBar${element.id}" class="progress-bar"></div>
-        </div>  
-        <div class="board_task_progress_subcount">
-            <div>0</div>
-            <div>/</div>
-            <div>${element.subtasks.length}</div>
-            <div style="margin-left: 2px">Subtasks</div>
-        </div>            
-        </div>
-        `;
+    // return `
+    //         <div class="board_task_progress_line">
+    //     <div class="board_task_progressbar">
+    //         <div id="progressBar${element.id}" class="progress-bar"></div>
+    //     </div>  
+    //     <div class="board_task_progress_subcount">
+    //         <div>0</div>
+    //         <div>/</div>
+    //         <div>${element.subtasks.length}</div>
+    //         <div style="margin-left: 2px">Subtasks</div>
+    //     </div>            
+    //     </div>
+    //     `;
 }
 
 /**
