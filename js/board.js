@@ -17,20 +17,21 @@ let selectedNames = [];
  * error handling.
  */
 async function saveTasksToServer(task) {
-    try {
-        const response = await fetch(`${BASE_URL}tasks/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(task)
-        });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-    } catch (error) {
-        console.error('Failed to save tasks to server:', error);
+    const response = await fetch(`${BASE_URL}tasks/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(task)
+    });
+
+    if (!response.ok) {
+        console.error('Fehler beim Speichern der Aufgabe:', await response.text());
+        throw new Error('Task konnte nicht gespeichert werden');
     }
+
+    const data = await response.json();
+    return data;
 }
 
 

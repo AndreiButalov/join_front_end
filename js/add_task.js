@@ -32,6 +32,24 @@ async function loadGuestFromServer() {
 }
 
 
+async function saveSubtasksToServer(task) {
+    try {
+        const response = await fetch(`${BASE_URL}subtasks/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+    } catch (error) {
+        console.error('Failed to save tasks to server:', error);
+    }
+}
+
+
 function getCurrentUserFromLocalStorage() {
     let currentUserString = localStorage.getItem('currentUser');
     if (currentUserString != null || currentUserString != '') {
@@ -101,19 +119,32 @@ async function addTaskToTasks(column) {
         'priority': getUserPriorityStatus(userPriotity),
         'status': document.getElementById('task_category').value,
         'title': document.getElementById('task_title').value,
-        // 'subtasks': subtasks,
-        // 'selectedTask': [],
     };
 
+    const savedTask = await saveTasksToServer(task);
 
+    await loadSubtasksToServer(savedTask.id);
 
-    await saveTasksToServer(task);
     if (window.location.href.includes('board.html')) {
         closeWindow();
         initBoardTasks();
     }
+
     initAddTask();
     slideInConfirmation();
+}
+
+
+async function loadSubtasksToServer(taskId) {
+    if (!subtasks || !Array.isArray(subtasks)) return;
+
+    subtasks.forEach(subtask => {
+        const subTaskData = {
+            'content': subtask,
+            'task': taskId
+        };
+        saveSubtasksToServer(subTaskData);
+    });
 }
 
 
@@ -230,7 +261,7 @@ function generateCheckBoxName() {
         .filter(Boolean);
     selectedGuests.forEach(guest => {
         if (guest.name === currentUser.name) {
-            userId = guest.id;           
+            userId = guest.id;
         } else {
             idList.push(guest.id);
         }
