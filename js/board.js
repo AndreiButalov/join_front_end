@@ -141,7 +141,7 @@ async function updateOnServer(id, updatedFields, path) {
     } catch (error) {
         console.error('Failed to update task on server:', error);
     }
-    initBoardTasks();
+    await initBoardTasks();
 }
 
 /**
@@ -420,6 +420,8 @@ function getSubtaskEdit(contact) {
     let task_subtasks_edit = document.getElementById('show_task_subtask_edit');
     task_subtasks_edit.innerHTML = '';
     const result = filterByTask(userSubtask, contact.id);
+    console.log(result);
+    
 
     if (result) {
         for (let i = 0; i < result.length; i++) {
@@ -485,7 +487,7 @@ async function addEditSubtask(i, id, contactId) {
     
     const updatedFields = { content: subtaskValue }
     await updateOnServer(id, updatedFields, 'subtasks/'); 
-    getSubtaskEdit(contact)    
+    getSubtaskEdit(contact)   
 }
 
 
