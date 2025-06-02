@@ -104,6 +104,27 @@ async function deleteTaskFromLocalStorage(id) {
 }
 
 
+async function deleteSubTaskFromLocalStorage(id) {
+
+    userSubtask = userSubtask.filter(subtask => {subtask.id !== id})
+    try {
+        const response = await fetch(`${BASE_URL}subtasks/${id}/`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete task from server');
+        }
+
+    } catch (error) {
+        console.error('Error deleting task from server:', error);
+    }
+
+    initBoardTasks();
+    closeShowTask();
+}
+
+
 async function updateOnServer(id, updatedFields, path) {
     try {
         const response = await fetch(BASE_URL + path + id + '/', {
@@ -215,8 +236,7 @@ async function generateShowTask(id) {
     let boardPopUp = document.getElementById('boardPopUp');
     let contact = todos.find(obj => obj['id'] == id);
     boardPopUp.innerHTML = renderGenerateShowTaskHtml(contact, id);
-    const result = filterByTask(userSubtask, contact.id);
-    
+    const result = filterByTask(userSubtask, contact.id);    
 
     generateCheckBoxSubTask(contact, id, result)
     getshowTaskUserName(contact);
@@ -399,13 +419,12 @@ function generateSelectedNames(contact) {
 function getSubtaskEdit(contact) {
     let task_subtasks_edit = document.getElementById('show_task_subtask_edit');
     task_subtasks_edit.innerHTML = '';
-
     const result = filterByTask(userSubtask, contact.id);
 
     if (result) {
         for (let i = 0; i < result.length; i++) {
             const element = result[i];
-            task_subtasks_edit.innerHTML += rendergetSubtaskEditHtml(element.content, i);
+            task_subtasks_edit.innerHTML += rendergetSubtaskEditHtml(element, i, contact.id);
         }
     } else {
         task_subtasks_edit.innerHTML = '';
@@ -441,12 +460,12 @@ function getCurrentTaskCategoryEdit(contact) {
  * the task details, including its subtasks, for further manipulation.
  */
 function showTaskEditSubtask(i, id) {
-    let contact = todos.find(obj => obj['id'] == id);
+    let subTask = userSubtask.find(obj => obj['id'] == id)    
     let show_task_subtask_edit_btn = document.getElementById(`show_task_subtask_edit_btn${i}`);
     show_task_subtask_edit_btn.style.display = 'flex';
     let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`);
 
-    show_task_subtask_edit_input.value = contact.subtasks[i];
+    show_task_subtask_edit_input.value = subTask.content;
 }
 
 
@@ -459,13 +478,14 @@ function showTaskEditSubtask(i, id) {
  * task in the `todos` array that needs to be updated. It is used to find the task object with the
  * matching `id` value in the `todos` array.
  */
-async function addEditSubtask(i, id) {
-    let contact = todos.find(obj => obj['id'] == id);
-    let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`);
-    contact.subtasks[i] = show_task_subtask_edit_input.value;
-    await saveTasksToServer();
-    getSubtaskEdit(contact);
-    initBoardTasks();
+async function addEditSubtask(i, id, contactId) {
+    let contact = todos.find(obj => obj['id'] == contactId);
+    let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`).value;
+    let subtaskValue = show_task_subtask_edit_input;
+    
+    const updatedFields = { content: subtaskValue }
+    await updateOnServer(id, updatedFields, 'subtasks/'); 
+    getSubtaskEdit(contact)    
 }
 
 
@@ -478,12 +498,8 @@ async function addEditSubtask(i, id) {
  * for which a subtask needs to be deleted. It is used to find the specific task object from the
  * `todos` array.
  */
-async function showTaskDeleteSubtask(i, id) {
-    let contact = todos.find(obj => obj['id'] == id);
-    contact.subtasks.splice(i, 1);
-    await saveTasksToServer();
-    getSubtaskEdit(contact);
-    initBoardTasks();
+async function showTaskDeleteSubtask(id) {
+    await deleteSubTaskFromLocalStorage(id)
 }
 
 

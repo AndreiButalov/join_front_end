@@ -331,21 +331,21 @@ function rendergenerateCheckBoxSubTaskHtml(element, id, i) {
  * @returns The `rendergetSubtaskEditHtml` function returns an HTML template string that includes input
  * fields, buttons, and images for editing and deleting subtasks within a task.
  */
-function rendergetSubtaskEditHtml(element, contact, i) {
+function rendergetSubtaskEditHtml(element, i, contactId) {
     return `
         <div class="show_task_subtask_edit_btn" id="show_task_subtask_edit_btn${i}">
             <input type="text" id="show_task_subtask_edit_input${i}">
             <div class="show_task_subtask_edit_btn_delete_add">
-                <img class="img_hover_btn" src="./assets/img/delete.svg" onclick="showTaskDeleteSubtask(${i}, ${contact.id})">
-                <img class="img_hover_btn" id="check" src="./assets/img/check-small-svgrepo-com.svg" onclick="addEditSubtask(${i}, ${contact.id})">
+                <img class="img_hover_btn" src="./assets/img/delete.svg" onclick="showTaskDeleteSubtask(${i}, ${element.id})">
+                <img class="img_hover_btn" id="check" src="./assets/img/check-small-svgrepo-com.svg" onclick="addEditSubtask(${i}, ${element.id}, ${contactId})">
             </div>
         </div>
         <div class="show_task_edit_subtasks_del_edit">
-            <div class="get_show_task"><li>${element}</li></div>
+            <div class="get_show_task"><li>${element.content}</li></div>
             <div class="show_task_edit_subtasks_del_edit_button">
-                <img class="img_hover_btn" src="./assets/img/edit.svg" onclick="showTaskEditSubtask(${i}, ${contact.id})">
+                <img class="img_hover_btn" src="./assets/img/edit.svg" onclick="showTaskEditSubtask(${i}, ${element.id})">
                 <div class="cross_line"></div>
-                <img class="img_hover_btn" src="./assets/img/delete.svg" onclick="showTaskDeleteSubtask(${i}, ${contact.id})">
+                <img class="img_hover_btn" src="./assets/img/delete.svg" onclick="showTaskDeleteSubtask(${i}, ${element.id})">
             </div>
         </div>    
     `;
