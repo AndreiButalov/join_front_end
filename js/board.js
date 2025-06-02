@@ -420,9 +420,6 @@ function getSubtaskEdit(contact) {
     let task_subtasks_edit = document.getElementById('show_task_subtask_edit');
     task_subtasks_edit.innerHTML = '';
     const result = filterByTask(userSubtask, contact.id);
-    console.log(result);
-    
-
     if (result) {
         for (let i = 0; i < result.length; i++) {
             const element = result[i];
