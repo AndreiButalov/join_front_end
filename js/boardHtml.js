@@ -38,13 +38,22 @@ function renderHtmlToDo(element) {
  */
 function renderHtmlProgressBar(element) {
     let currentAllSubtask = element.length;
-    let currentSelectedSubtask = 1;
+    let currentSelectedSubtask = 0;
 
-    let width = (currentSelectedSubtask / currentAllSubtask * 100).toFixed(0);
+    element.forEach(item => {
+        if (item.is_done === true) {
+            currentSelectedSubtask++;
+        }
+    });
+
+    let width = (currentAllSubtask > 0)
+        ? (currentSelectedSubtask / currentAllSubtask * 100).toFixed(0)
+        : 0;
+
     return `
         <div class="board_task_progress_line">
             <div class="board_task_progressbar">
-                <div id="progressBar${element.id}" class="progress-bar" style="width: ${width}%"></div>
+                <div id="progressBar${element[0]?.parent_id || ''}" class="progress-bar" style="width: ${width}%"></div>
             </div>  
             <div class="board_task_progress_subcount">
                 <div>${currentSelectedSubtask}</div>
@@ -293,13 +302,14 @@ function renderEditTaskHtml(contact) {
  * checkbox element with a label and a span containing the `element` value. The checkbox is checked if
  * `contact.selectedTask` includes the `element`, otherwise it is unchecked.
  */
-function rendergenerateCheckBoxSubTaskHtml(contact, element, id, i) {
-    const isChecked = contact.selectedTask ? contact.selectedTask.includes(element) : false;
+function rendergenerateCheckBoxSubTaskHtml(element, id, i) {
+    const isChecked = element.is_done === true;
+    
     return `
         <div class="checkbox-wrapper-27 show_task_subtask_content">
             <label class="checkbox" for="${id}_${i}">
-                <input type="checkbox" id="${id}_${i}" name="subtask" data-value="${element}" ${isChecked ? 'checked' : ''}>
-                <span class="checkbox__icon"><span class="checkboxSubject">${element}</span></span>
+                <input type="checkbox" id="${id}_${i}" name="subtask" data-value="${element.content}" ${isChecked ? 'checked' : ''}>
+                <span class="checkbox__icon"><span class="checkboxSubject">${element.content}</span></span>
             </label>
         </div>
     `;

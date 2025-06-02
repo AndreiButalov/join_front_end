@@ -270,7 +270,7 @@ async function moveTo(category) {
 
     contact['category'] = category;
 
-    await updateTaskOnServer(contact.id, { category });
+    await updateOnServer(contact.id, { category }, 'tasks/');
 
     removeHighlightTaskCategory('board_' + category);
     initBoardTasks();
@@ -344,15 +344,14 @@ function closeWindow() {
  * identify the specific task for which the subtasks are being generated. It is likely used to
  * differentiate between different tasks and their corresponding subtasks.
  */
-function generateCheckBoxSubTask(contact, id) {
+function generateCheckBoxSubTask(contact, id, result) {
     let show_task_subtask = document.getElementById('show_task_subtask');
     show_task_subtask.innerHTML = '';
-    const result = filterByTask(userSubtask, contact.id);
     
     if (contact && result.length > 0) {
         for (let i = 0; i < result.length; i++) {
-            const element = result[i];
-            show_task_subtask.innerHTML += rendergenerateCheckBoxSubTaskHtml(contact, element.content, id, i);
+            const element = result[i];  
+            show_task_subtask.innerHTML += rendergenerateCheckBoxSubTaskHtml(element, id, i);
         }
         document.querySelectorAll(`#show_task_subtask input[type="checkbox"]`).forEach(checkbox => {
             checkbox.addEventListener('change', function () {

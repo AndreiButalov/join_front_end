@@ -104,9 +104,9 @@ async function deleteTaskFromLocalStorage(id) {
 }
 
 
-async function updateTaskOnServer(id, updatedFields) {
+async function updateOnServer(id, updatedFields, path) {
     try {
-        const response = await fetch(`${BASE_URL}tasks/${id}/`, {
+        const response = await fetch(BASE_URL + path + id + '/', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,7 +122,6 @@ async function updateTaskOnServer(id, updatedFields) {
     }
     initBoardTasks();
 }
-
 
 /**
  * The function `initBoardTasks` loads tasks from the server and categorizes them into different
@@ -169,7 +168,7 @@ async function generateToDo(arr, categorie_id, category) {
     if (arr.length) {
         for (let i = 0; i < arr.length; i++) {
             const element = arr[i];
-            
+
             categorie_id.innerHTML += renderHtmlToDo(element);
             let idSUb = document.getElementById(`idSUb${element.id}`);
             const result = filterByTask(userSubtask, element.id);
@@ -216,8 +215,10 @@ async function generateShowTask(id) {
     let boardPopUp = document.getElementById('boardPopUp');
     let contact = todos.find(obj => obj['id'] == id);
     boardPopUp.innerHTML = renderGenerateShowTaskHtml(contact, id);
+    const result = filterByTask(userSubtask, contact.id);
+    
 
-    generateCheckBoxSubTask(contact, id)
+    generateCheckBoxSubTask(contact, id, result)
     getshowTaskUserName(contact);
     getCategorieBackGroundColorShowTask(contact, id);
 }
@@ -237,21 +238,13 @@ async function generateShowTask(id) {
  * checked or not. If `isChecked` is `true`, it means the subtask is checked; if `isChecked` is
  * `false`, it means the subtask is not checked.
  */
-async function updateSubtaskStatus(contact, subtask, isChecked) {
-
-    if (contact) {
-        if (!contact.selectedTask) {
-            contact.selectedTask = [];
-        }
-        if (isChecked) {
-            if (!contact.selectedTask.includes(subtask)) {
-                contact.selectedTask.push(subtask);
-            }
-        } else {
-            contact.selectedTask = contact.selectedTask.filter(task => task !== subtask);
-        }
-        await saveTasksToServer();
-        initBoardTasks();
+async function updateSubtaskStatus(contact, subtaskContent, isChecked) {
+    const result = filterByTask(userSubtask, contact.id);
+    const targetSubtask = result.find(element => element.content === subtaskContent);
+    
+    if (targetSubtask) {
+        const updatedFields = { is_done: isChecked };
+        await updateOnServer(targetSubtask.id, updatedFields, 'subtasks/');
     }
 }
 
@@ -407,7 +400,7 @@ function getSubtaskEdit(contact) {
     let task_subtasks_edit = document.getElementById('show_task_subtask_edit');
     task_subtasks_edit.innerHTML = '';
 
-    const result = filterByTask(userSubtask, contact.id);    
+    const result = filterByTask(userSubtask, contact.id);
 
     if (result) {
         for (let i = 0; i < result.length; i++) {
@@ -421,7 +414,7 @@ function getSubtaskEdit(contact) {
 
 
 function filterByTask(dataArray, taskId) {
-  return dataArray.filter(item => item.task === taskId);
+    return dataArray.filter(item => item.task === taskId);
 }
 
 
@@ -534,7 +527,7 @@ async function upgradeTodos(id) {
         ...getUpdatedPriority(),
         ...getUpdatedTaskCategory()
     };
-    await updateTaskOnServer(id, updatedFields);
+    await updateOnServer(id, updatedFields, 'tasks/');
     reloadUI();
 }
 
@@ -550,7 +543,7 @@ function getUpdatedContactDetails() {
     let contactsIds = [];
 
     selectedNames.forEach(name => {
-        let gast = findeGastNachName(guesteArray, name);        
+        let gast = findeGastNachName(guesteArray, name);
         gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
     });
 
