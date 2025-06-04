@@ -152,6 +152,8 @@ async function initBoardTasks() {
     await loadTasksFromServer();
     await loadGuestFromServer();
     await loadSubTasksFromServer();
+    await loadUsersFromServer();
+
 
 
     let task = document.getElementById('board_to_do');
@@ -664,12 +666,19 @@ function searchTaskFromBoard() {
 function getInitialsArray(element) {
     const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
     const guests = [];
+    
+    if (userId) {
+        const user = usersFromServer.find(user => user.id === userId);
+        if (user) guests.push(user);
+    }
 
-    if (userId) guests.push(findeGastNachId(guesteArray, userId));
-    guestIds.forEach(id => guests.push(findeGastNachId(guesteArray, id)));
+    guestIds.forEach(guestId => {
+        const guest = findeGastNachId(guesteArray, guestId);
+        if (guest) guests.push(guest);
+    });
 
     const initialsArray = guests.map(g => getInitials(g.name));
-    const colorsArray = guests.map(g => g.color);
+    const colorsArray = guests.map(g => g.color || '#ccc');
     const showLimit = 3;
     const boardTaskInitial = document.getElementById(`board_task_initial${id}`);
     boardTaskInitial.innerHTML = '';

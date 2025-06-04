@@ -6,7 +6,8 @@ let imgPriority;
 let addTaskProcess = false;
 let idList = [];
 let userId;
-let currentUser
+let currentUser;
+let usersFromServer;
 
 
 /**
@@ -26,6 +27,23 @@ async function loadGuestFromServer() {
         }));
         guesteArray = [user, ...serverDaten];
 
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Daten:', error);
+    }
+}
+
+
+async function loadUsersFromServer() {
+    try {
+        const response = await fetch(`${BASE_URL_GUEST}users`);
+        if (!response.ok) {
+            throw new Error('Netzwerkantwort war nicht ok.');
+        }
+        const data = await response.json();
+        usersFromServer = Object.keys(data).map(id => ({
+            id,
+            ...data[id]
+        }));
     } catch (error) {
         console.error('Fehler beim Abrufen der Daten:', error);
     }
@@ -64,9 +82,9 @@ function getCurrentUserFromLocalStorage() {
 async function initAddTask() {
     getCurrentUserFromLocalStorage()
     await loadGuestFromServer();
-    await loadTasksFromServer();
-
-
+    await loadTasksFromServer();  
+    await loadUsersFromServer();
+    
     generateCheckBox();
     document.querySelectorAll('input[name="optionen"]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {
