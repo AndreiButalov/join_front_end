@@ -84,7 +84,7 @@ async function initAddTask() {
     await loadGuestFromServer();
     await loadTasksFromServer();  
     await loadUsersFromServer();
-    
+
     generateCheckBox();
     document.querySelectorAll('input[name="optionen"]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {
@@ -300,7 +300,6 @@ function generateCheckBox() {
             id.innerHTML += renderHtmlGenerateCheckBox(element, i)
         }
 
-        // Überprüfe, ob das Element 'checkBoxes' vorhanden ist, bevor du darauf zugreifst
         let checkboxes = document.getElementById("checkBoxes");
         if (checkboxes) {
             document.addEventListener('click', function (event) {

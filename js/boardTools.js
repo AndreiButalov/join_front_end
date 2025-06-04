@@ -102,13 +102,16 @@ function updateSelectedNames(event) {
  * selected names and their corresponding colors.
  */
 function updateDisplayedNames() {
-
+    
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
     if (selectedNames.length > 0) {
         selectedNames.forEach((element, i) => {
             let name = element;
             let guest = guesteArray.find(guest => guest.name === name);
+            if (guest == undefined) {
+                guest = usersFromServer.find(guest => guest.name === name)
+            }
             task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${guest.color};">${getInitials(element)}</div>
             `;

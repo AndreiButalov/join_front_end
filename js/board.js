@@ -299,7 +299,8 @@ function getSelectedUsers(contact) {
     const guests = [];
 
     if (contact.assigned_user) {
-        const gast = findeGastNachId(guesteArray, contact.assigned_user);
+        const gast = findeGastNachId(usersFromServer, contact.assigned_user);
+        
         if (gast) guests.push(gast);
     }
 
