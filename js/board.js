@@ -556,16 +556,25 @@ async function upgradeTodos(id) {
  * @param contact - The `contact` parameter is an object that represents a contact or task. It contains
  * the following properties:
  */
+
 function getUpdatedContactDetails() {
-    let userId;
+    let userId = null;
     let contactsIds = [];
 
     selectedNames.forEach(name => {
         let gast = findeGastNachName(guesteArray, name);
-        gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
-    });
 
-    userId = userId === undefined ? null : userId;
+        if (gast) {
+            gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
+        } else {            
+            gast = findeGastNachName(usersFromServer, name);
+            if (gast) {
+                userId = gast.id;
+            } else {
+                console.warn(`Name "${name}" wurde weder in guesteArray noch in userFromServer gefunden.`);
+            }
+        }
+    });
 
     return {
         title: document.getElementById('task_title_edit').value,
@@ -576,6 +585,7 @@ function getUpdatedContactDetails() {
         assigned_user: userId
     };
 }
+
 
 
 function findeGastNachName(guesteArray, name) {
