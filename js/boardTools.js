@@ -44,7 +44,7 @@ function getInitials(name) {
  * contact in the `todos` array based on its ID. This contact's information will then be used to
  * populate and update a list of checkboxes in the HTML with the corresponding names and initials.
  */
-function getcheckBoxesEdit(id) {
+async function getcheckBoxesEdit(id) {
     let contact = todos.find(obj => obj['id'] == id);
     let checkBoxesEdit = document.getElementById('checkBoxesEdit');
     checkBoxesEdit.innerHTML = '';
@@ -56,7 +56,17 @@ function getcheckBoxesEdit(id) {
         selectedNames.push(user.name);
     });
 
-    checkBoxesEdit.innerHTML = guesteArray.map(guest => {
+    let allGuests = [...guesteArray];
+
+    selectedUser.forEach(user => {
+        const existsInGuests = guesteArray.some(guest => guest.id === user.id);
+        if (!existsInGuests && (user.id !== user.id || selectedNames.includes(user.name))) {
+            allGuests.push(user);
+            allGuests = allGuests.filter(g => g.id !== currentUser.id);            
+        }
+    });
+    
+    checkBoxesEdit.innerHTML = allGuests.map(guest => {
         let isChecked = selectedNames.includes(guest.name);
         let initial = getInitials(guest.name);
         return rendergetcheckBoxesEdit(guest, initial, isChecked);
@@ -72,6 +82,7 @@ function getcheckBoxesEdit(id) {
 
 
 
+
 /**
  * The function `updateSelectedNames` updates an array of selected names based on checkbox input and
  * then calls another function to update the displayed names.
@@ -81,8 +92,8 @@ function getcheckBoxesEdit(id) {
  */
 function updateSelectedNames(event) {
     let checkbox = event.target;
-    let name = checkbox.value;    
-    
+    let name = checkbox.value;
+
     if (checkbox.checked) {
         if (!selectedNames.includes(name)) {
             selectedNames.push(name);
@@ -102,7 +113,7 @@ function updateSelectedNames(event) {
  * selected names and their corresponding colors.
  */
 function updateDisplayedNames() {
-    
+
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
     if (selectedNames.length > 0) {
@@ -350,10 +361,10 @@ function closeWindow() {
 function generateCheckBoxSubTask(contact, id, result) {
     let show_task_subtask = document.getElementById('show_task_subtask');
     show_task_subtask.innerHTML = '';
-    
+
     if (contact && result.length > 0) {
         for (let i = 0; i < result.length; i++) {
-            const element = result[i];  
+            const element = result[i];
             show_task_subtask.innerHTML += rendergenerateCheckBoxSubTaskHtml(element, id, i);
         }
         document.querySelectorAll(`#show_task_subtask input[type="checkbox"]`).forEach(checkbox => {

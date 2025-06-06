@@ -149,6 +149,7 @@ async function updateOnServer(id, updatedFields, path) {
  * sections on a board based on their status.
  */
 async function initBoardTasks() {
+    getCurrentUserFromLocalStorage()
     await loadTasksFromServer();
     await loadGuestFromServer();
     await loadSubTasksFromServer();
