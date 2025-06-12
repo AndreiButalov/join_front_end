@@ -48,6 +48,7 @@ function checkIsUserLoginFromLastSession() {
 async function loadData() {
     let response = await fetch(`${BASE_URL}users`);
     let responseToJson = await response.json();
+    
     return responseToJson;
 }
 
@@ -84,16 +85,45 @@ async function login() {
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     const rememberMe = document.getElementById('login-rememberme').checked;
-    const data = await loadData('users');
 
-    if (checkEmailInDB(data, email) && checkPasswortInDB(data, password)) {
-        setCurrentUserInLocalStorage(data);
-        window.location.href = 'summary.html';
-        if (rememberMe) {
-            setEmailToLocalstorage(email);
-        } else { removeEmailFromLocalstorage() }
-    } else { wrongPassword('show') }
+    try {
+        const response = await fetch(`${BASE_URL}auth/login/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+        setCurrentUserInLocalStorage(result)
+
+        if (response.ok) {
+            setCurrentUserInLocalStorage(result)
+            if (rememberMe) {
+                setEmailToLocalstorage(email);
+            } else {
+                removeEmailFromLocalstorage();
+            }
+            window.location.href = "summary.html";
+        } else {
+            showLoginError(result.error);
+        }
+    } catch (error) {
+        console.error('Login fehlgeschlagen:', error);
+        showLoginError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
+    }
 }
+
+
+function showLoginError(message) {
+    const errorElement = document.getElementById('login-error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.remove('d-none');
+    }
+}
+
 
 /**
  * this function is used to login with the guest user
@@ -101,6 +131,7 @@ async function login() {
 
  async function guestLogin() {
     const data = await loadData('users');
+    
     setDefaultUser(data);
     window.location.href = 'summary.html';
 }
@@ -109,11 +140,12 @@ async function login() {
  * this function is used to set a default user for the guestlogin
  */
 function setDefaultUser(data) {
-    const gastEintrag = data.find(item => item.name === "Gast");    
+    const gastEintrag = data.find(item => item.user.username === "Gast");       
+    
     let defaultUser = {
-        name: gastEintrag.name,
-        email: gastEintrag.email,
-        password: gastEintrag.password,
+        name: gastEintrag.user.username,
+        email: gastEintrag.user.email,
+        password: gastEintrag.user.password,
         color: gastEintrag.color,
     }
     localStorage.setItem('currentUser', JSON.stringify(defaultUser));
@@ -125,12 +157,12 @@ function setDefaultUser(data) {
  * @param {*} data 
  */
 
-function setCurrentUserInLocalStorage(data) {
+function setCurrentUserInLocalStorage(data) {    
     let user = {
-        id: data[indexOfEmail].id,
-        name: data[indexOfEmail].name,
-        email: data[indexOfEmail].email,
-        color: data[indexOfEmail].color,
+        id: data.id,
+        name: data.user.username,
+        email: data.user.email,
+        color: data.color,
     }
     
     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -145,7 +177,7 @@ function setCurrentUserInLocalStorage(data) {
  */
 
 function checkEmailInDB(data, email) {
-    indexOfEmail = data.findIndex(element => element['email'] == email);
+    indexOfEmail = data.findIndex(element => element.user.email == email);
     if (indexOfEmail >= 0) {
         return true
     }
@@ -159,9 +191,12 @@ function checkEmailInDB(data, email) {
  * @returns 
  */
 
-function checkPasswortInDB(data, checkPassword) {
+function checkPasswortInDB(data, checkPassword) {  
+    // console.log(checkPassword);
+    // console.log(data.find(item => console.log(item.user.password)));
+    
     if (indexOfEmail >= 0) {
-        if (data[indexOfEmail]['password'] == checkPassword) {
+        if (data.find(item => item.user.password == checkPassword)) {
             return true;
         }
     }
