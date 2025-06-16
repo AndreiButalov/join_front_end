@@ -84,7 +84,7 @@ async function initAddTask() {
     await loadGuestFromServer();
     await loadTasksFromServer();  
     await loadUsersFromServer();
-
+    
     generateCheckBox();
     document.querySelectorAll('input[name="optionen"]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {

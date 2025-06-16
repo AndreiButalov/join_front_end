@@ -155,8 +155,6 @@ async function initBoardTasks() {
     await loadSubTasksFromServer();
     await loadUsersFromServer();
 
-
-
     let task = document.getElementById('board_to_do');
     let progress = document.getElementById('board_in_progress');
     let awaitFeedback = document.getElementById('board_await_feedback');
@@ -205,6 +203,7 @@ async function generateToDo(arr, categorie_id, category) {
                     idSUb.innerHTML += renderHtmlProgressBar(result);
                 }
             }
+            
             getInitialsArray(element);
             getCategorieBackGroundColor(element);
         }
@@ -282,8 +281,8 @@ async function updateSubtaskStatus(contact, subtaskContent, isChecked) {
 function getshowTaskUserName(contact) {
     const showTaskUserName = document.getElementById('show_task_user_name');
     showTaskUserName.innerHTML = "";
-
-    getSelectedUsers(contact).forEach(gast => {
+    let selectedUserArray = getSelectedUsersArray(contact)
+    selectedUserArray.forEach(gast => {
         const initial = getInitials(gast.name);
         showTaskUserName.innerHTML += `
             <div class="show_task_assigned_to_users">                
@@ -291,18 +290,21 @@ function getshowTaskUserName(contact) {
                 <div>${gast.name}</div>
             </div>
         `;
-    });
-
+    })
 }
 
 
 function getSelectedUsers(contact) {
     const guests = [];
-
     if (contact.assigned_user) {
         const gast = findeGastNachId(usersFromServer, contact.assigned_user);
+        let userData = {
+            id: gast.id,
+            name: gast.user.username,
+            color: gast.color
+        }       
         
-        if (gast) guests.push(gast);
+        if (gast) guests.push(userData);
     }
 
     if (Array.isArray(contact.assigned_guests)) {
@@ -311,6 +313,7 @@ function getSelectedUsers(contact) {
             if (gast) guests.push(gast);
         });
     }
+    
     return guests
 }
 
@@ -401,14 +404,15 @@ function generateSelectedNames(contact) {
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
 
-    if (getSelectedUsers(contact)) {
-        getSelectedUsers(contact).forEach(gast => {
-            let initial = getInitials(gast.name)
+    let selectedGuests = getSelectedUsersArray(contact);
+
+    selectedGuests.forEach(gast => {
+        let initial = getInitials(gast.name)
             task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
-        });
-    }
+        
+    })
 }
 
 
@@ -561,14 +565,12 @@ async function upgradeTodos(id) {
 function getUpdatedContactDetails() {
     let userId = null;
     let contactsIds = [];
-
     selectedNames.forEach(name => {
         let gast = findeGastNachName(guesteArray, name);
-
         if (gast) {
             gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
         } else {            
-            gast = findeGastNachName(usersFromServer, name);
+            gast = usersFromServer.find(guest => guest.user.username === name);
             if (gast) {
                 userId = gast.id;
             } else {
@@ -675,24 +677,13 @@ function searchTaskFromBoard() {
  * colors arrays from the `element` object, sets a limit for the number of initials to display, and
  * then
  */
-function getInitialsArray(element) {
+function getInitialsArray(element) {    
     const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
-    const guests = [];
-    
-    if (userId) {
-        const user = usersFromServer.find(user => user.id === userId);
-        if (user) guests.push(user);
-    }
-
-    guestIds.forEach(guestId => {
-        const guest = findeGastNachId(guesteArray, guestId);
-        if (guest) guests.push(guest);
-    });
-
+    let guests = getSelectedUsersArray(element)
     const initialsArray = guests.map(g => getInitials(g.name));
     const colorsArray = guests.map(g => g.color || '#ccc');
     const showLimit = 3;
-    const boardTaskInitial = document.getElementById(`board_task_initial${id}`);
+    const boardTaskInitial = document.getElementById(`board_task_initial${element.id}`);
     boardTaskInitial.innerHTML = '';
 
     initialsArray.forEach((initial, i) => {
@@ -702,4 +693,27 @@ function getInitialsArray(element) {
             boardTaskInitial.innerHTML += createRemainingPersonsBlock(initialsArray.length - showLimit);
         }
     });
+}
+
+
+
+function getSelectedUsersArray(element) {
+    const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
+    const guests = [];
+    
+    if (userId) {
+        const user = usersFromServer.find(user => user.id === userId);
+        let userDate = {
+            id: user.id,
+            name: user.user.username,
+            color: user.color
+        } 
+        if (user) guests.push(userDate);
+    }
+    guestIds.forEach(guestId => {    
+        const guest = findeGastNachId(guesteArray, guestId);
+        if (guest) guests.push(guest);
+    });
+
+    return guests
 }

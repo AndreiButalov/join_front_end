@@ -304,6 +304,7 @@ function renderEditTaskHtml(contact) {
  */
 function rendergenerateCheckBoxSubTaskHtml(element, id, i) {
     const isChecked = element.is_done === true;
+    console.log(element);
     
     return `
         <div class="checkbox-wrapper-27 show_task_subtask_content">

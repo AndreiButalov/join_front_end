@@ -48,7 +48,7 @@ function checkIsUserLoginFromLastSession() {
 async function loadData() {
     let response = await fetch(`${BASE_URL}users`);
     let responseToJson = await response.json();
-    
+
     return responseToJson;
 }
 
@@ -96,7 +96,6 @@ async function login() {
         });
 
         const result = await response.json();
-        setCurrentUserInLocalStorage(result)
 
         if (response.ok) {
             setCurrentUserInLocalStorage(result)
@@ -107,11 +106,15 @@ async function login() {
             }
             window.location.href = "summary.html";
         } else {
-            showLoginError(result.error);
+            if (result.error === "Falsches Passwort") {
+                wrongPassword('show');
+            } else {
+                showLoginError(result.error);
+            }
         }
     } catch (error) {
-        console.error('Login fehlgeschlagen:', error);
-        showLoginError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
+        // console.error('Login fehlgeschlagen:', error);
+        // showLoginError("Ein Fehler ist aufgetreten. Bitte versuche es erneut.");
     }
 }
 
@@ -129,9 +132,9 @@ function showLoginError(message) {
  * this function is used to login with the guest user
  */
 
- async function guestLogin() {
+async function guestLogin() {
     const data = await loadData('users');
-    
+
     setDefaultUser(data);
     window.location.href = 'summary.html';
 }
@@ -140,8 +143,8 @@ function showLoginError(message) {
  * this function is used to set a default user for the guestlogin
  */
 function setDefaultUser(data) {
-    const gastEintrag = data.find(item => item.user.username === "Gast");       
-    
+    const gastEintrag = data.find(item => item.user.username === "Gast");
+
     let defaultUser = {
         name: gastEintrag.user.username,
         email: gastEintrag.user.email,
@@ -157,50 +160,17 @@ function setDefaultUser(data) {
  * @param {*} data 
  */
 
-function setCurrentUserInLocalStorage(data) {    
+function setCurrentUserInLocalStorage(data) {
     let user = {
         id: data.id,
         name: data.user.username,
         email: data.user.email,
         color: data.color,
     }
-    
+
     localStorage.setItem('currentUser', JSON.stringify(user));
 }
 
-/**
- * this function is used to check if the email already appears in the string
- * 
- * @param {*} data
- * @param {*} email
- * @returns 
- */
-
-function checkEmailInDB(data, email) {
-    indexOfEmail = data.findIndex(element => element.user.email == email);
-    if (indexOfEmail >= 0) {
-        return true
-    }
-}
-
-/**
- * this function is used to check if the password right
- * 
- * @param {*} data 
- * @param {*} checkPassword 
- * @returns 
- */
-
-function checkPasswortInDB(data, checkPassword) {  
-    // console.log(checkPassword);
-    // console.log(data.find(item => console.log(item.user.password)));
-    
-    if (indexOfEmail >= 0) {
-        if (data.find(item => item.user.password == checkPassword)) {
-            return true;
-        }
-    }
-}
 
 /**
  * this function is used to set the email to localstorage
@@ -253,19 +223,18 @@ async function register() {
         return;
     }
 
-    // Überprüfe, ob die E-Mail bereits existiert
-    if (checkEmailInDB(users, email)) {
-        alert("Die E-Mail existiert bereits.");
-        return;
-    }
-
-    // Wenn alles in Ordnung ist, fahre mit der Registrierung fort
     let listOfUser = {
-        'color': randomContactColor(),
-        'email': email,
-        'name': name,
-        'password': password,
+        color: randomContactColor(),
+        user: {
+            username: name,
+            email: email,
+            password: password
+        },
+        
     };
+
+    console.log(listOfUser);
+    
 
     postData(listOfUser);
     signUpSuccesfullyInfoBox('show');
@@ -376,6 +345,7 @@ function wrongPassword(val) {
         inputField.style.borderColor = '#d1d1d1';
     }
 }
+
 
 /**
  * this function is used to show the password no matching with the first password from inputfiel

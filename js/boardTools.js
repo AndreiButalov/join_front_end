@@ -50,14 +50,15 @@ async function getcheckBoxesEdit(id) {
     checkBoxesEdit.innerHTML = '';
 
     let selectedUser = getSelectedUsers(contact);
+    
     selectedNames = [];
-
+    
     selectedUser.forEach(user => {
         selectedNames.push(user.name);
     });
-
+    
     let allGuests = [...guesteArray];
-
+    
     selectedUser.forEach(user => {
         const existsInGuests = guesteArray.some(guest => guest.id === user.id);
         if (!existsInGuests && (user.id !== user.id || selectedNames.includes(user.name))) {
@@ -65,7 +66,7 @@ async function getcheckBoxesEdit(id) {
             allGuests = allGuests.filter(g => g.id !== currentUser.id);            
         }
     });
-    
+        
     checkBoxesEdit.innerHTML = allGuests.map(guest => {
         let isChecked = selectedNames.includes(guest.name);
         let initial = getInitials(guest.name);
@@ -113,7 +114,6 @@ function updateSelectedNames(event) {
  * selected names and their corresponding colors.
  */
 function updateDisplayedNames() {
-
     let task_edit_initial = document.getElementById('task_edit_initial');
     task_edit_initial.innerHTML = '';
     if (selectedNames.length > 0) {
@@ -121,8 +121,13 @@ function updateDisplayedNames() {
             let name = element;
             let guest = guesteArray.find(guest => guest.name === name);
             if (guest == undefined) {
-                guest = usersFromServer.find(guest => guest.name === name)
-            }
+                let user = usersFromServer.find(guest => guest.user.username === name)
+                guest = {
+                    id: user.id,
+                    name: user.user.username,
+                    color: user.color
+                }
+            }           
             task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${guest.color};">${getInitials(element)}</div>
             `;
