@@ -35,7 +35,7 @@ async function loadGuestFromServer() {
 
 async function loadUsersFromServer() {
     try {
-        const response = await fetch(`${BASE_URL_GUEST}users`);
+        const response = await fetch(`${BASE_URL_GUEST}auth/users`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
