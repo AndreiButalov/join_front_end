@@ -46,7 +46,7 @@ function checkIsUserLoginFromLastSession() {
  */
 
 async function loadData() {
-    let response = await fetch(`${BASE_URL}users`);
+    let response = await fetch(`${BASE_URL}auth/users`);
     let responseToJson = await response.json();
 
     return responseToJson;
@@ -62,7 +62,7 @@ async function loadData() {
 
 async function postData(data) {
     try {
-        const response = await fetch(`${BASE_URL}users/`, {
+        const response = await fetch(`${BASE_URL}auth/users/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -232,9 +232,6 @@ async function register() {
         },
         
     };
-
-    console.log(listOfUser);
-    
 
     postData(listOfUser);
     signUpSuccesfullyInfoBox('show');
