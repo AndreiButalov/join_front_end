@@ -62,7 +62,7 @@ async function loadData() {
 
 async function postData(data) {
     try {
-        const response = await fetch(`${BASE_URL}auth/users/`, {
+        const response = await fetch(`${BASE_URL}auth/register/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -216,7 +216,6 @@ async function register() {
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register1-password').value;
     const passwordCheck = document.getElementById('register2-password').value;
-    const users = await loadData();
 
     if (password !== passwordCheck) {
         noMatchingPassword('show');
@@ -225,12 +224,10 @@ async function register() {
 
     let listOfUser = {
         color: randomContactColor(),
-        user: {
-            username: name,
-            email: email,
-            password: password
-        },
-        
+        username: name,
+        email: email,
+        password: password,
+        repeated_password: passwordCheck
     };
 
     postData(listOfUser);
