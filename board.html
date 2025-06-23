@@ -31,7 +31,12 @@
     </div>
 
     <div id="addedTaskConfirmation" class="addedTaskConfirmation">
-        <span class="confirmationSpan">Task added to board. <img class="filterBright" src="./assets/img/boardIcon.svg"></span>
+        <span class="confirmationSpan">Task added to board. <img class="filterBright"
+                src="./assets/img/boardIcon.svg"></span>
+    </div>
+    <div id="pleaseLogin" class="addedTaskConfirmation">
+        <span class="confirmationSpan">Bitte logen Sie sich ein. <img class="filterBright"
+                src="./assets/img/boardIcon.svg"></span>
     </div>
 
     <div class="board_container" id="board_container">
@@ -42,7 +47,7 @@
                 <div class="task_navigation">
                     <div class="input_task_navigation">
                         <input class="input_find_task" id="input_find_task" type="text" placeholder="Find Task"
-                        oninput="searchTaskFromBoard()">
+                            oninput="searchTaskFromBoard()">
                         <div class="task_navi_line"></div>
                         <img src="./assets/img/search.svg" alt="">
                     </div>
@@ -91,24 +96,29 @@
                 <button onclick="navigateTo('/add_task.html'); changeAddTaskCategory()">+</button>
             </div>
             <div class="bord_content_colum_left" id="board_to_do" ondrop="moveTo('to_do')"
-                ondragover="allowDrop(event); highlightTaskCategory('board_to_do')" ondragleave="removeHighlightTaskCategory('board_to_do')">
+                ondragover="allowDrop(event); highlightTaskCategory('board_to_do')"
+                ondragleave="removeHighlightTaskCategory('board_to_do')">
             </div>
             <div class="board_content_mobile_taskTitle">
                 <h2>In Progress</h2>
                 <button onclick="navigateTo('/add_task.html')">+</button>
             </div>
             <div class="bord_content_colum" id="board_in_progress" ondrop="moveTo('in_progress')"
-                ondragover="allowDrop(event); highlightTaskCategory('board_in_progress')" ondragleave="removeHighlightTaskCategory('board_in_progress')">
+                ondragover="allowDrop(event); highlightTaskCategory('board_in_progress')"
+                ondragleave="removeHighlightTaskCategory('board_in_progress')">
             </div>
             <div class="board_content_mobile_taskTitle">
                 <h2>Await Feedback</h2>
                 <button onclick="navigateTo('/add_task.html')">+</button>
             </div>
             <div class="bord_content_colum" id="board_await_feedback" ondrop="moveTo('awaitt')"
-                ondragover="allowDrop(event); highlightTaskCategory('board_await_feedback')" ondragleave="removeHighlightTaskCategory('board_await_feedback')">
+                ondragover="allowDrop(event); highlightTaskCategory('board_await_feedback')"
+                ondragleave="removeHighlightTaskCategory('board_await_feedback')">
             </div>
             <h2>Done</h2>
-            <div class="bord_content_colum_right" id="board_done" ondrop="moveTo('done')" ondragover="allowDrop(event); highlightTaskCategory('board_done')" ondragleave="removeHighlightTaskCategory('board_done')">
+            <div class="bord_content_colum_right" id="board_done" ondrop="moveTo('done')"
+                ondragover="allowDrop(event); highlightTaskCategory('board_done')"
+                ondragleave="removeHighlightTaskCategory('board_done')">
             </div>
         </div>
 

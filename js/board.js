@@ -18,22 +18,25 @@ let userSubtask = [];
  * error handling.
  */
 async function saveTasksToServer(task) {
+    const token = localStorage.getItem('authToken'); // Token holen
+
     const response = await fetch(`${BASE_URL}tasks/`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}` // Token anhängen
         },
         body: JSON.stringify(task)
     });
 
     if (!response.ok) {
-        console.error('Fehler beim Speichern der Aufgabe:', await response.text());
-        throw new Error('Task konnte nicht gespeichert werden');
+        pleaseLogin();
     }
 
     const data = await response.json();
     return data;
 }
+
 
 
 /**
@@ -127,7 +130,7 @@ async function deleteTaskFromLocalStorage(id) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to delete task from server');
+            pleaseLogin();
         }
 
     } catch (error) {
@@ -186,7 +189,7 @@ async function updateOnServer(id, updatedFields, path) {
             throw new Error(`Update failed with status ${response.status}`);
         }
     } catch (error) {
-        console.error('Failed to update task on server:', error);
+        pleaseLogin();
     }
     await initBoardTasks();
 }

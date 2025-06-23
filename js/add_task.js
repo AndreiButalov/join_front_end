@@ -81,14 +81,18 @@ async function loadUsersFromServer() {
 
 
 async function saveSubtasksToServer(task) {
+    const token = localStorage.getItem('authToken'); // Token holen
+
     try {
         const response = await fetch(`${BASE_URL}subtasks/`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}` // Token setzen
             },
             body: JSON.stringify(task)
         });
+
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -96,6 +100,7 @@ async function saveSubtasksToServer(task) {
         console.error('Failed to save tasks to server:', error);
     }
 }
+
 
 
 function getCurrentUserFromLocalStorage() {
@@ -251,6 +256,16 @@ function slideInConfirmation() {
         createTaskButton = document.getElementById('createTaskButton');
         createTaskButton.disabled = false;
         confirmation.style.animation = 'fadeConfirmation 0.3s ease-in-out';
+        if (window.location.href.includes('add_task.html')) { navigateTo('board.html') }
+    }, 1250);
+}
+
+
+function pleaseLogin() {
+    let confirmation = document.getElementById('pleaseLogin');
+    confirmation.style.animation = 'slideInAddedTaskConfirmation 1.25s cubic-bezier(0, 1.19, 0, 0.96)';
+    setTimeout(() => {
+        confirmation.style.animation = 'fadeConfirmation 1.25s ease-in-out';
         if (window.location.href.includes('add_task.html')) { navigateTo('board.html') }
     }, 1250);
 }
