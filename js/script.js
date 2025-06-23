@@ -189,10 +189,30 @@ function initForCurrentPage() {
  * from the fetch response.
  */
 async function getData() {
-  response = await fetch(baseUrl + path);
-  responseAsJson = await response.json();
-  data = Object.values(responseAsJson);
+  try {
+    const token = localStorage.getItem('authToken');
+    const response = await fetch(baseUrl + path, {
+      headers: {
+        'Authorization': `Token ${token}`
+      }
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.warn('Nicht autorisiert – bitte einloggen.');
+        window.location.href = 'index.html';
+        return;
+      }
+      throw new Error('Netzwerkantwort war nicht ok.');
+    }
+    
+    const responseAsJson = await response.json();
+    data = Object.values(responseAsJson);
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Daten:', error);
+  }
 }
+
 
 
 /**
@@ -331,6 +351,7 @@ function getInitialsFromObject(contact) {
  * This is used for a log out function, for example.
  */
 function resetCurrentUser() {
+  localStorage.removeItem('authToken');
   localStorage.removeItem('currentUser');
 }
 

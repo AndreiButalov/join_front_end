@@ -18,7 +18,7 @@ function updateGreeting() {
     } else {
         greeting = `Good evening${greetName()}`;
     }
-    greetElement.forEach((element) => { element.innerHTML = greeting } );
+    greetElement.forEach((element) => { element.innerHTML = greeting });
     greetName();
 }
 
@@ -30,14 +30,14 @@ function updateGreeting() {
  * @returns The function `greetName` will return a comma (`,`) if the user's name is not 'Gast',
  * and an exclamation mark (`!`) if the user's name is 'Gast'.
  */
-function greetName(){
+function greetName() {
     let greetName = document.querySelectorAll('.greetName');
 
     if (user['name'] !== 'Gast') {
-        greetName.forEach((element) => { element.innerHTML = `${user['name']}`});
+        greetName.forEach((element) => { element.innerHTML = `${user['name']}` });
         return ',';
     } else {
-        greetName.forEach((element) => { element.innerHTML = ''} );
+        greetName.forEach((element) => { element.innerHTML = '' });
         return `!`;
     };
 }
@@ -47,7 +47,7 @@ function greetName(){
  * The function `getBoardNumbersInSummary` retrieves board data and updates the HTML elements with the
  * number of tasks in different categories of the summary.html (dashboard).
  */
-async function getBoardNumbersInSummary(){
+async function getBoardNumbersInSummary() {
     let done = document.getElementById('done');
     let toDo = document.getElementById('toDo');
     let urgent = document.getElementById('urgent');
@@ -70,17 +70,37 @@ async function getBoardNumbersInSummary(){
  */
 async function getBoardData() {
     path = 'tasks';
-    response = await fetch(baseUrl + path);
-    responseAsJson = await response.json();
-    data = Object.values(responseAsJson);
-  }
+    try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(baseUrl + path, {
+            headers: {
+                'Authorization': `Token ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 401) {
+                console.warn('Nicht autorisiert – bitte einloggen.');
+                window.location.href = 'index.html'; // Zur Login-Seite weiterleiten
+                return;
+            }
+            throw new Error('Netzwerkantwort war nicht ok.');
+        }
+
+        const responseAsJson = await response.json();
+        data = Object.values(responseAsJson);
+    } catch (error) {
+        console.error('Fehler beim Abrufen der Board-Daten:', error);
+    }
+}
+
 
 
 /**
  * The function `numberOfDoneTasks` returns the number of tasks that are marked as 'done' in the globally defined data.
  * @returns the number of tasks that have the category 'done' in the data array.
  */
-function numberOfDoneTasks(){
+function numberOfDoneTasks() {
     let done = data.filter(item => item['category'] === 'done');
     return /*html*/`
         ${done.length}
@@ -97,7 +117,7 @@ function numberOfToDoTasks() {
     let toDoTasks = data.filter(item => item['category'] === 'to_do');
     return /*html*/`
         ${toDoTasks.length}
-    `;    
+    `;
 }
 
 
@@ -113,7 +133,7 @@ function numberOfUrgentTasks() {
     setUpComingDeadline(urgent);
     return /*html*/`
         ${urgent.length}
-    `;    
+    `;
 }
 
 
@@ -132,7 +152,7 @@ function setUpComingDeadline(urgent) {
     let pastDatesNumber = document.getElementById('pastDatesNumber');
     let deadLine = getNextUrgentDate(urgent);
     let now = new Date();
-    
+
     let pastDates = urgent.filter(item => new Date(item.date) < now);
     let futureDates = urgent.filter(item => new Date(item.date) >= now);
 
@@ -201,7 +221,7 @@ function getNextUrgentDate(urgent) {
  * array length.
  * @returns the number of tasks in the `data` array.
  */
-function numberOfTasksInBoard(done){
+function numberOfTasksInBoard(done) {
     let tasksInBoard = data.length - done.innerHTML;
     return /*html*/`
         ${tasksInBoard}
@@ -215,7 +235,7 @@ function numberOfTasksInBoard(done){
  * @returns The function `numberOfTasksInProgress` is returning the number of tasks that are currently
  * in progress.
  */
-function numberOfTasksInProgress(){
+function numberOfTasksInProgress() {
     let inProgress = data.filter(item => item['category'] === 'in_progress');
     return /*html*/`
     ${inProgress.length}

@@ -16,10 +16,24 @@ let usersFromServer;
  */
 async function loadGuestFromServer() {
     try {
-        const response = await fetch(`${BASE_URL_GUEST}guestContacts`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${BASE_URL_GUEST}guestContacts/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Nicht autorisiert – Weiterleitung zur Login-Seite.");
+                window.location.href = 'index.html';
+                return;
+            }
             throw new Error('Netzwerkantwort war nicht ok.');
         }
+
         const data = await response.json();
         const serverDaten = Object.keys(data).map(id => ({
             id,
@@ -33,12 +47,27 @@ async function loadGuestFromServer() {
 }
 
 
+
 async function loadUsersFromServer() {
     try {
-        const response = await fetch(`${BASE_URL_GUEST}auth/users`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${BASE_URL_GUEST}auth/users/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Nicht autorisiert – Weiterleitung zur Login-Seite.");
+                window.location.href = 'index.html';
+                return;
+            }
             throw new Error('Netzwerkantwort war nicht ok.');
         }
+
         const data = await response.json();
         usersFromServer = Object.keys(data).map(id => ({
             id,
@@ -48,6 +77,7 @@ async function loadUsersFromServer() {
         console.error('Fehler beim Abrufen der Daten:', error);
     }
 }
+
 
 
 async function saveSubtasksToServer(task) {

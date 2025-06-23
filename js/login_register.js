@@ -46,9 +46,23 @@ function checkIsUserLoginFromLastSession() {
  */
 
 async function loadData() {
-    let response = await fetch(`${BASE_URL}auth/users`);
-    let responseToJson = await response.json();
+    const token = localStorage.getItem('authToken');
+    
+    const response = await fetch(`${BASE_URL}auth/users`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
 
+    if (response.status === 401) {
+        console.warn("Nicht autorisiert – Weiterleitung zur Login-Seite.");
+        window.location.href = 'index.html';
+        return;
+    }
+
+    const responseToJson = await response.json();
     return responseToJson;
 }
 
@@ -95,10 +109,11 @@ async function login() {
             body: JSON.stringify({ email, password }),
         });
 
-        const result = await response.json();
+        const result = await response.json();        
 
         if (response.ok) {
-            setCurrentUserInLocalStorage(result)
+            localStorage.setItem('authToken', result.token);
+            setCurrentUserInLocalStorage(result.user);
             if (rememberMe) {
                 setEmailToLocalstorage(email);
             } else {
@@ -133,10 +148,30 @@ function showLoginError(message) {
  */
 
 async function guestLogin() {
-    const data = await loadData('users');
+    const guestEmail = 'gast@join.de';
+    const guestPassword = '1234567';
 
-    setDefaultUser(data);
-    window.location.href = 'summary.html';
+    await loginWithCredentials(guestEmail, guestPassword);
+}
+
+
+async function loginWithCredentials(email, password) {
+    try {
+        const response = await fetch(`${BASE_URL}auth/login/`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        if (!response.ok) {
+            throw new Error("Login fehlgeschlagen");
+        }
+        const result = await response.json();
+        localStorage.setItem('authToken', result.token);
+        setCurrentUserInLocalStorage(result.user);
+        window.location.href = "summary.html";
+    } catch (error) {
+        console.error('Gast Login fehlgeschlagen:', error);
+    }
 }
 
 /**

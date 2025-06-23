@@ -42,10 +42,24 @@ async function saveTasksToServer(task) {
  */
 async function loadTasksFromServer() {
     try {
-        const response = await fetch(`${BASE_URL}tasks`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${BASE_URL}tasks/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Nicht autorisiert – Weiterleitung zur Login-Seite.");
+                window.location.href = 'index.html';
+                return;
+            }
             throw new Error('Netzwerkantwort war nicht ok.');
         }
+
         const data = await response.json();
         todos = Object.keys(data).map(id => ({
             id,
@@ -58,12 +72,27 @@ async function loadTasksFromServer() {
 
 
 
+
 async function loadSubTasksFromServer() {
     try {
-        const response = await fetch(`${BASE_URL}subtasks`);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${BASE_URL}subtasks/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Token ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Nicht autorisiert – Weiterleitung zur Login-Seite.");
+                window.location.href = 'index.html';
+                return;
+            }
             throw new Error('Netzwerkantwort war nicht ok.');
         }
+
         const data = await response.json();
         userSubtask = Object.keys(data).map(id => ({
             id,
@@ -73,6 +102,7 @@ async function loadSubTasksFromServer() {
         console.error('Fehler beim Abrufen der Daten:', error);
     }
 }
+
 
 
 /**
@@ -87,8 +117,13 @@ async function deleteTaskFromLocalStorage(id) {
 
     todos = todos.filter(todo => todo.id !== id);
     try {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${BASE_URL}tasks/${id}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
         });
 
         if (!response.ok) {
@@ -106,10 +141,15 @@ async function deleteTaskFromLocalStorage(id) {
 
 async function deleteSubTaskFromLocalStorage(id) {
 
-    userSubtask = userSubtask.filter(subtask => {subtask.id !== id})
+    userSubtask = userSubtask.filter(subtask => { subtask.id !== id })
     try {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(`${BASE_URL}subtasks/${id}/`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
         });
 
         if (!response.ok) {
@@ -127,15 +167,22 @@ async function deleteSubTaskFromLocalStorage(id) {
 
 async function updateOnServer(id, updatedFields, path) {
     try {
+        const token = localStorage.getItem('authToken');
         const response = await fetch(BASE_URL + path + id + '/', {
             method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(updatedFields)
         });
 
         if (!response.ok) {
+            if (response.status === 401) {
+                console.warn("Nicht autorisiert – bitte einloggen.");
+                window.location.href = 'index.html';
+                return;
+            }
             throw new Error(`Update failed with status ${response.status}`);
         }
     } catch (error) {
@@ -143,6 +190,7 @@ async function updateOnServer(id, updatedFields, path) {
     }
     await initBoardTasks();
 }
+
 
 /**
  * The function `initBoardTasks` loads tasks from the server and categorizes them into different
@@ -203,7 +251,7 @@ async function generateToDo(arr, categorie_id, category) {
                     idSUb.innerHTML += renderHtmlProgressBar(result);
                 }
             }
-            
+
             getInitialsArray(element);
             getCategorieBackGroundColor(element);
         }
@@ -238,7 +286,7 @@ async function generateShowTask(id) {
     let boardPopUp = document.getElementById('boardPopUp');
     let contact = todos.find(obj => obj['id'] == id);
     boardPopUp.innerHTML = renderGenerateShowTaskHtml(contact, id);
-    const result = filterByTask(userSubtask, contact.id);    
+    const result = filterByTask(userSubtask, contact.id);
 
     generateCheckBoxSubTask(contact, id, result)
     getshowTaskUserName(contact);
@@ -263,7 +311,7 @@ async function generateShowTask(id) {
 async function updateSubtaskStatus(contact, subtaskContent, isChecked) {
     const result = filterByTask(userSubtask, contact.id);
     const targetSubtask = result.find(element => element.content === subtaskContent);
-    
+
     if (targetSubtask) {
         const updatedFields = { is_done: isChecked };
         await updateOnServer(targetSubtask.id, updatedFields, 'subtasks/');
@@ -302,8 +350,8 @@ function getSelectedUsers(contact) {
             id: gast.id,
             name: gast.user.username,
             color: gast.color
-        }       
-        
+        }
+
         if (gast) guests.push(userData);
     }
 
@@ -313,7 +361,7 @@ function getSelectedUsers(contact) {
             if (gast) guests.push(gast);
         });
     }
-    
+
     return guests
 }
 
@@ -408,10 +456,10 @@ function generateSelectedNames(contact) {
 
     selectedGuests.forEach(gast => {
         let initial = getInitials(gast.name)
-            task_edit_initial.innerHTML += `
+        task_edit_initial.innerHTML += `
                 <div class="board_task_user_initial show_task_user_initial" style="background-color: ${gast.color};">${initial}</div>
                 `;
-        
+
     })
 }
 
@@ -467,7 +515,7 @@ function getCurrentTaskCategoryEdit(contact) {
  * the task details, including its subtasks, for further manipulation.
  */
 function showTaskEditSubtask(i, id) {
-    let subTask = userSubtask.find(obj => obj['id'] == id)    
+    let subTask = userSubtask.find(obj => obj['id'] == id)
     let show_task_subtask_edit_btn = document.getElementById(`show_task_subtask_edit_btn${i}`);
     show_task_subtask_edit_btn.style.display = 'flex';
     let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`);
@@ -489,10 +537,10 @@ async function addEditSubtask(i, id, contactId) {
     let contact = todos.find(obj => obj['id'] == contactId);
     let show_task_subtask_edit_input = document.getElementById(`show_task_subtask_edit_input${i}`).value;
     let subtaskValue = show_task_subtask_edit_input;
-    
+
     const updatedFields = { content: subtaskValue }
-    await updateOnServer(id, updatedFields, 'subtasks/'); 
-    getSubtaskEdit(contact)   
+    await updateOnServer(id, updatedFields, 'subtasks/');
+    getSubtaskEdit(contact)
 }
 
 
@@ -569,7 +617,7 @@ function getUpdatedContactDetails() {
         let gast = findeGastNachName(guesteArray, name);
         if (gast) {
             gast.id === user.id ? userId = gast.id : contactsIds.push(gast.id);
-        } else {            
+        } else {
             gast = usersFromServer.find(guest => guest.user.username === name);
             if (gast) {
                 userId = gast.id;
@@ -677,7 +725,7 @@ function searchTaskFromBoard() {
  * colors arrays from the `element` object, sets a limit for the number of initials to display, and
  * then
  */
-function getInitialsArray(element) {    
+function getInitialsArray(element) {
     const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
     let guests = getSelectedUsersArray(element)
     const initialsArray = guests.map(g => getInitials(g.name));
@@ -700,17 +748,17 @@ function getInitialsArray(element) {
 function getSelectedUsersArray(element) {
     const { assigned_user: userId, assigned_guests: guestIds = [], id } = element;
     const guests = [];
-    
+
     if (userId) {
         const user = usersFromServer.find(user => user.id === userId);
         let userDate = {
             id: user.id,
             name: user.user.username,
             color: user.color
-        } 
+        }
         if (user) guests.push(userDate);
     }
-    guestIds.forEach(guestId => {    
+    guestIds.forEach(guestId => {
         const guest = findeGastNachId(guesteArray, guestId);
         if (guest) guests.push(guest);
     });
